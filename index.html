@@ -1,0 +1,2420 @@
+<!DOCTYPE html>
+<html lang="ur" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ملؔت اسلامی - Millat-e-Islami</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Noto+Nastaliq+Urdu:wght@400;700&family=Roboto:wght@300;400;500;700&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-green: #1a5f3f;
+            --secondary-green: #2d8659;
+            --accent-gold: #d4af37;
+            --light-gold: #ffd700;
+            --text-dark: #333;
+            --text-light: #666;
+            --bg-white: rgba(255, 255, 255, 0.95);
+            --shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        body {
+            font-family: 'Noto Nastaliq Urdu', 'Amiri', 'Roboto', sans-serif;
+            background: linear-gradient(135deg, var(--primary-green) 0%, var(--secondary-green) 50%, var(--primary-green) 100%);
+            color: var(--text-dark);
+            min-height: 100vh;
+            transition: all 0.3s ease;
+        }
+
+        body.english {
+            font-family: 'Roboto', 'Noto Nastaliq Urdu', sans-serif;
+            direction: ltr;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Animated Background */
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .bg-animation::before,
+        .bg-animation::after {
+            content: '☪';
+            position: absolute;
+            font-size: 200px;
+            color: rgba(212, 175, 55, 0.1);
+            animation: float 15s ease-in-out infinite;
+        }
+
+        .bg-animation::before {
+            top: 10%;
+            left: 10%;
+            animation-delay: 0s;
+        }
+
+        .bg-animation::after {
+            bottom: 10%;
+            right: 10%;
+            animation-delay: 7s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-30px) rotate(180deg); }
+        }
+
+        /* Header */
+        .header {
+            background: var(--bg-white);
+            backdrop-filter: blur(15px);
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 3px solid var(--accent-gold);
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo-icon {
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, var(--accent-gold), var(--light-gold));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            color: var(--primary-green);
+            font-weight: bold;
+            animation: pulse 2s infinite;
+            box-shadow: 0 5px 15px rgba(212, 175, 55, 0.3);
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .logo-text h1 {
+            font-size: 32px;
+            color: var(--primary-green);
+            margin-bottom: 5px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .logo-text p {
+            font-size: 14px;
+            color: var(--text-light);
+        }
+
+        .header-controls {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .language-selector {
+            display: flex;
+            gap: 5px;
+            background: white;
+            border-radius: 25px;
+            padding: 5px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        }
+
+        .lang-btn {
+            padding: 8px 15px;
+            border: none;
+            background: transparent;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .lang-btn.active {
+            background: linear-gradient(135deg, var(--primary-green), var(--secondary-green));
+            color: white;
+        }
+
+        .theme-toggle {
+            background: var(--primary-green);
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 16px;
+        }
+
+        .theme-toggle:hover {
+            background: var(--accent-gold);
+            transform: rotate(180deg);
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .nav-btn {
+            padding: 12px 25px;
+            background: linear-gradient(135deg, var(--primary-green), var(--secondary-green));
+            color: white;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: inherit;
+            font-weight: 600;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nav-btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: var(--accent-gold);
+            border-radius: 50%;
+            transition: all 0.3s ease;
+            transform: translate(-50%, -50%);
+            z-index: -1;
+        }
+
+        .nav-btn:hover::before,
+        .nav-btn.active::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        .nav-btn:hover,
+        .nav-btn.active {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+        }
+
+        /* Dark Theme */
+        body.dark-theme {
+            background: linear-gradient(135deg, #0d2818 0%, #1a3d2e 50%, #0d2818 100%);
+        }
+
+        body.dark-theme .header {
+            background: rgba(20, 20, 20, 0.95);
+        }
+
+        body.dark-theme .section {
+            background: rgba(30, 30, 30, 0.95);
+            color: #e0e0e0;
+        }
+
+        body.dark-theme .card {
+            background: rgba(40, 40, 40, 0.8);
+            color: #e0e0e0;
+        }
+
+        body.dark-theme .form-control {
+            background: rgba(50, 50, 50, 0.8);
+            border-color: #555;
+            color: white;
+        }
+
+        /* Main Content */
+        .main-content {
+            padding: 40px 0;
+        }
+
+        .section {
+            display: none;
+            background: var(--bg-white);
+            backdrop-filter: blur(15px);
+            border-radius: 25px;
+            padding: 40px;
+            margin: 20px 0;
+            box-shadow: var(--shadow);
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .section::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, transparent, rgba(212, 175, 55, 0.05), transparent);
+            animation: shimmer 3s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+            100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+        }
+
+        .section.active {
+            display: block;
+            animation: slideIn 0.5s ease-out;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .section-title {
+            font-size: 36px;
+            color: var(--primary-green);
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 3px solid var(--accent-gold);
+            position: relative;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .section-title::after {
+            content: '☪';
+            position: absolute;
+            top: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: white;
+            color: var(--accent-gold);
+            padding: 0 15px;
+            font-size: 28px;
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes glow {
+            from { text-shadow: 0 0 5px var(--accent-gold); }
+            to { text-shadow: 0 0 20px var(--accent-gold), 0 0 30px var(--accent-gold); }
+        }
+
+        /* Cards */
+        .card {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            margin: 25px 0;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            border-left: 6px solid var(--accent-gold);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+        }
+
+        .leader-card {
+            text-align: center;
+            background: linear-gradient(135deg, var(--primary-green), var(--secondary-green));
+            color: white;
+            border: none;
+            position: relative;
+        }
+
+        .leader-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: repeating-linear-gradient(
+                45deg,
+                transparent,
+                transparent 10px,
+                rgba(255,255,255,0.05) 10px,
+                rgba(255,255,255,0.05) 20px
+            );
+            animation: slide 20s linear infinite;
+        }
+
+        @keyframes slide {
+            0% { transform: translateX(-50px) translateY(-50px); }
+            100% { transform: translateX(50px) translateY(50px); }
+        }
+
+        .leader-avatar {
+            width: 130px;
+            height: 130px;
+            background: var(--accent-gold);
+            border-radius: 50%;
+            margin: 0 auto 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 42px;
+            color: var(--primary-green);
+            position: relative;
+            z-index: 1;
+            box-shadow: 0 0 30px rgba(212, 175, 55, 0.3);
+        }
+
+        /* Enhanced Forms */
+        .form-group {
+            margin: 25px 0;
+            position: relative;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: 700;
+            color: var(--primary-green);
+            font-size: 16px;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 15px 20px;
+            border: 2px solid #e1e1e1;
+            border-radius: 15px;
+            font-family: inherit;
+            transition: all 0.3s ease;
+            background: white;
+            font-size: 16px;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--accent-gold);
+            box-shadow: 0 0 15px rgba(212, 175, 55, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .btn {
+            padding: 15px 35px;
+            background: linear-gradient(135deg, var(--primary-green), var(--secondary-green));
+            color: white;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            font-family: inherit;
+            font-weight: 700;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+
+        /* Enhanced Lists */
+        .member-list, .project-list {
+            display: grid;
+            gap: 20px;
+            margin-top: 25px;
+        }
+
+        .member-item, .project-item {
+            background: linear-gradient(135deg, #f8f9fa, #ffffff);
+            padding: 20px;
+            border-radius: 15px;
+            border-left: 5px solid var(--accent-gold);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .member-item:hover, .project-item:hover {
+            transform: translateX(5px);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+
+        .member-item::before, .project-item::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 3px;
+            height: 100%;
+            background: var(--accent-gold);
+            transition: width 0.3s ease;
+        }
+
+        .member-item:hover::before, .project-item:hover::before {
+            width: 8px;
+        }
+
+        .delete-btn {
+            background: linear-gradient(135deg, #dc3545, #c82333);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .delete-btn:hover {
+            background: #b21e2d;
+            transform: scale(1.05);
+        }
+
+        /* Enhanced Stats */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 25px;
+            margin: 35px 0;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, var(--accent-gold), var(--light-gold));
+            color: var(--primary-green);
+            padding: 35px;
+            border-radius: 20px;
+            text-align: center;
+            box-shadow: 0 10px 25px rgba(212, 175, 55, 0.3);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.1), transparent);
+            transform: rotate(45deg);
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(212, 175, 55, 0.4);
+        }
+
+        .stat-card:hover::before {
+            animation: sparkle 1s ease;
+        }
+
+        @keyframes sparkle {
+            0% { transform: translateX(-100%) rotate(45deg); }
+            100% { transform: translateX(100%) rotate(45deg); }
+        }
+
+        .stat-number {
+            font-size: 42px;
+            font-weight: bold;
+            display: block;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .stat-label {
+            font-size: 18px;
+            margin-top: 15px;
+            font-weight: 600;
+        }
+
+        /* Enhanced Progress Bar */
+        .progress-bar {
+            background: #e1e1e1;
+            border-radius: 15px;
+            overflow: hidden;
+            height: 25px;
+            margin: 15px 0;
+            position: relative;
+            box-shadow: inset 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .progress-fill {
+            background: linear-gradient(90deg, var(--primary-green), var(--accent-gold));
+            height: 100%;
+            transition: width 1s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 14px;
+            font-weight: bold;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .progress-fill::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            animation: progressShine 2s infinite;
+        }
+
+        @keyframes progressShine {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+
+        /* Bismillah Enhancement */
+        .bismillah {
+            text-align: center;
+            font-size: 28px;
+            color: var(--primary-green);
+            margin-bottom: 35px;
+            padding: 25px;
+            background: rgba(212, 175, 55, 0.1);
+            border-radius: 20px;
+            border: 3px solid var(--accent-gold);
+            position: relative;
+            overflow: hidden;
+            font-weight: 700;
+        }
+
+        .bismillah::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, var(--accent-gold), var(--light-gold), var(--accent-gold));
+            z-index: -1;
+            border-radius: 20px;
+            animation: borderGlow 3s linear infinite;
+        }
+
+        @keyframes borderGlow {
+            0% { filter: hue-rotate(0deg); }
+            100% { filter: hue-rotate(360deg); }
+        }
+
+        /* Notification System */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: linear-gradient(135deg, #28a745, #20c997);
+            color: white;
+            padding: 15px 25px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            z-index: 1000;
+            transform: translateX(400px);
+            transition: all 0.3s ease;
+        }
+
+        .notification.show {
+            transform: translateX(0);
+        }
+
+        .notification.error {
+            background: linear-gradient(135deg, #dc3545, #c82333);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .nav-menu {
+                justify-content: center;
+            }
+
+            .section {
+                padding: 25px 15px;
+                margin: 15px 0;
+            }
+
+            .logo-text h1 {
+                font-size: 24px;
+            }
+
+            .section-title {
+                font-size: 28px;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .member-item, .project-item {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 0 10px;
+            }
+            
+            .section {
+                padding: 20px 10px;
+            }
+            
+            .card {
+                padding: 20px 15px;
+            }
+        }
+
+        /* Print Styles */
+        @media print {
+            .header, .nav-menu, .delete-btn, .btn {
+                display: none;
+            }
+            
+            .section {
+                background: white;
+                box-shadow: none;
+                page-break-inside: avoid;
+            }
+        }
+
+        /* Accessibility */
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
+        }
+
+        .focus-visible {
+            outline: 3px solid var(--accent-gold);
+            outline-offset: 2px;
+        }
+
+        /* Loading Animation */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-animation"></div>
+    
+    <!-- Notification System -->
+    <div id="notification" class="notification">
+        <i class="fas fa-check-circle" style="margin-right: 10px;"></i>
+        <span id="notificationText"></span>
+    </div>
+
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <div class="logo-icon">☪</div>
+                    <div class="logo-text">
+                        <h1 data-translate="orgName">ملؔت اسلامی</h1>
+                        <p data-translate="orgSubtitle">Hanafi Fiqh • Ahle Sunnat</p>
+                    </div>
+                </div>
+                
+                <div class="header-controls">
+                    <div class="language-selector">
+                        <button class="lang-btn active" onclick="changeLanguage('ur')">اردو</button>
+                        <button class="lang-btn" onclick="changeLanguage('en')">English</button>
+                        <button class="lang-btn" onclick="changeLanguage('ar')">عربي</button>
+                    </div>
+                    
+                    <button class="theme-toggle" onclick="toggleTheme()" title="Toggle Dark Mode">
+                        <i class="fas fa-moon"></i>
+                    </button>
+                </div>
+                
+                <nav class="nav-menu">
+                    <button class="nav-btn active" onclick="showSection('home')">
+                        <i class="fas fa-home" style="margin-right: 8px;"></i>
+                        <span data-translate="navHome">ہوم</span>
+                    </button>
+                    <button class="nav-btn" onclick="showSection('members')">
+                        <i class="fas fa-users" style="margin-right: 8px;"></i>
+                        <span data-translate="navMembers">ممبرز</span>
+                    </button>
+                    <button class="nav-btn" onclick="showSection('projects')">
+                        <i class="fas fa-project-diagram" style="margin-right: 8px;"></i>
+                        <span data-translate="navProjects">پروجیکٹس</span>
+                    </button>
+                    <button class="nav-btn" onclick="showSection('gallery')">
+                        <i class="fas fa-images" style="margin-right: 8px;"></i>
+                        <span data-translate="navGallery">گیلری</span>
+                    </button>
+                    <button class="nav-btn" onclick="showSection('reports')">
+                        <i class="fas fa-chart-bar" style="margin-right: 8px;"></i>
+                        <span data-translate="navReports">رپورٹس</span>
+                    </button>
+                    <button class="nav-btn" onclick="showSection('about')">
+                        <i class="fas fa-info-circle" style="margin-right: 8px;"></i>
+                        <span data-translate="navAbout">تعارف</span>
+                    </button>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <div class="container">
+            <!-- Home Section -->
+            <section id="home" class="section active">
+                <div class="bismillah" data-translate="bismillah">
+                    ﴿ بِسْمِ اللَّهِ الرَّحْمَـٰنِ الرَّحِيمِ ﴾
+                </div>
+                
+                <h2 class="section-title" data-translate="welcomeTitle">ملؔت اسلامی میں خوش آمدید</h2>
+                
+                <div class="card leader-card">
+                    <div class="leader-avatar">ق</div>
+                    <h3 data-translate="leaderName">قاضی ارشاد حسین قریشی</h3>
+                    <p data-translate="leaderTitle">صدر تنظیم اور استاد دین</p>
+                    <p style="margin-top: 15px; font-size: 16px; opacity: 0.9;" data-translate="leaderDesc">
+                        آپ کی کریمانہ رہنمائی میں ہم اسلامی خدمات انجام دے رہے ہیں
+                    </p>
+                </div>
+
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <span class="stat-number" id="memberCount">25</span>
+                        <div class="stat-label" data-translate="statMembers">رجسٹرڈ ممبرز</div>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-number" id="projectCount">1</span>
+                        <div class="stat-label" data-translate="statProjects">فعال پروجیکٹس</div>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-number" id="hanafiFiqh">100%</span>
+                        <div class="stat-label" data-translate="statFiqh">حنفی فقہ</div>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-number" id="yearsActive">5+</span>
+                        <div class="stat-label" data-translate="statYears">سال کا تجربہ</div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3 data-translate="currentProjectTitle">
+                        <i class="fas fa-home" style="margin-left: 10px; color: var(--accent-gold);"></i>
+                        موجودہ پروجیکٹ: قرآنی کتب کا تحفظ گھر
+                    </h3>
+                    <p data-translate="currentProjectDesc">
+                        فی الوقت ہم زیر زمین خندق کے ساتھ کوٹھری کی تعمیر کر رہے ہیں تاکہ خراب قرآن مجید اور دینی کتابوں کو محفوظ رکھا جا سکے۔ یہ پروجیکٹ اسلامی تراث کی حفاظت کے لیے انتہائی اہم ہے۔
+                    </p>
+                    
+                    <div style="margin-top: 25px;">
+                        <strong data-translate="projectProgress">پروجیکٹ کی پیش قدمی:</strong>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="mainProjectProgress" style="width: 35%;">35%</div>
+                        </div>
+                        <div style="margin-top: 15px; display: flex; gap: 15px; flex-wrap: wrap;">
+                            <div style="background: #e8f5e8; padding: 10px 15px; border-radius: 10px; flex: 1; min-width: 150px;">
+                                <strong style="color: #28a745;" data-translate="completed">مکمل:</strong>
+                                <div data-translate="completedTasks">بنیادی کام، منصوبہ بندی</div>
+                            </div>
+                            <div style="background: #fff3cd; padding: 10px 15px; border-radius: 10px; flex: 1; min-width: 150px;">
+                                <strong style="color: #856404;" data-translate="inProgress">جاری:</strong>
+                                <div data-translate="currentTasks">تعمیراتی کام، مواد خریداری</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Members Section -->
+            <section id="members" class="section">
+                <h2 class="section-title" data-translate="membersTitle">ممبرز کا انتظام</h2>
+                
+                <div class="card">
+                    <h3 data-translate="addMemberTitle">
+                        <i class="fas fa-user-plus" style="margin-left: 10px; color: var(--accent-gold);"></i>
+                        نیا ممبر شامل کریں
+                    </h3>
+                    <form id="memberForm">
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px;">
+                            <div class="form-group">
+                                <label data-translate="memberNameLabel">
+                                    <i class="fas fa-user"></i> مکمل نام:
+                                </label>
+                                <input type="text" class="form-control" id="memberName" required 
+                                       data-translate-placeholder="memberNamePlaceholder" placeholder="ممبر کا پورا نام درج کریں">
+                            </div>
+                            <div class="form-group">
+                                <label data-translate="memberRoleLabel">
+                                    <i class="fas fa-briefcase"></i> عہدہ/کردار:
+                                </label>
+                                <select class="form-control" id="memberRole" required>
+                                    <option value="" data-translate="selectRole">عہدہ منتخب کریں</option>
+                                    <option value="president" data-translate="rolePresident">صدر</option>
+                                    <option value="vice-president" data-translate="roleVicePresident">نائب صدر</option>
+                                    <option value="secretary" data-translate="roleSecretary">سکریٹری</option>
+                                    <option value="treasurer" data-translate="roleTreasurer">خزانچی</option>
+                                    <option value="member" data-translate="roleMember">ممبر</option>
+                                    <option value="volunteer" data-translate="roleVolunteer">رضاکار</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px;">
+                            <div class="form-group">
+                                <label data-translate="memberPhoneLabel">
+                                    <i class="fas fa-phone"></i> فون نمبر:
+                                </label>
+                                <input type="tel" class="form-control" id="memberPhone" 
+                                       data-translate-placeholder="memberPhonePlaceholder" placeholder="+91-1234567890">
+                            </div>
+                            <div class="form-group">
+                                <label data-translate="memberEmailLabel">
+                                    <i class="fas fa-envelope"></i> ای میل (اختیاری):
+                                </label>
+                                <input type="email" class="form-control" id="memberEmail" 
+                                       data-translate-placeholder="memberEmailPlaceholder" placeholder="email@example.com">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label data-translate="memberNotesLabel">
+                                <i class="fas fa-sticky-note"></i> اضافی معلومات:
+                            </label>
+                            <textarea class="form-control" id="memberNotes" rows="3" 
+                                      data-translate-placeholder="memberNotesPlaceholder" 
+                                      placeholder="کوئی اضافی تفصیلات یا خصوصی ذمہ داریاں"></textarea>
+                        </div>
+                        <button type="submit" class="btn">
+                            <i class="fas fa-plus-circle" style="margin-left: 8px;"></i>
+                            <span data-translate="addMemberBtn">ممبر شامل کریں</span>
+                        </button>
+                    </form>
+                </div>
+
+                <div class="card">
+                    <h3 data-translate="membersListTitle">
+                        <i class="fas fa-list" style="margin-left: 10px; color: var(--accent-gold);"></i>
+                        تمام رجسٹرڈ ممبرز
+                    </h3>
+                    <div style="margin: 20px 0; display: flex; gap: 15px; align-items: center; flex-wrap: wrap;">
+                        <input type="text" id="memberSearchInput" class="form-control" style="flex: 1; min-width: 250px;" 
+                               data-translate-placeholder="searchMembers" placeholder="ممبر تلاش کریں...">
+                        <select id="roleFilter" class="form-control" style="width: 200px;">
+                            <option value="" data-translate="allRoles">تمام عہدے</option>
+                            <option value="president" data-translate="rolePresident">صدر</option>
+                            <option value="secretary" data-translate="roleSecretary">سکریٹری</option>
+                            <option value="member" data-translate="roleMember">ممبر</option>
+                        </select>
+                        <button class="btn" onclick="exportMembers()" style="padding: 10px 20px;">
+                            <i class="fas fa-download"></i> <span data-translate="exportBtn">ایکسپورٹ</span>
+                        </button>
+                    </div>
+                    <div class="member-list" id="membersList"></div>
+                </div>
+            </section>
+
+            <!-- Projects Section -->
+            <section id="projects" class="section">
+                <h2 class="section-title" data-translate="projectsTitle">پروجیکٹس کا انتظام</h2>
+                
+                <div class="card">
+                    <h3 data-translate="addProjectTitle">
+                        <i class="fas fa-plus-square" style="margin-left: 10px; color: var(--accent-gold);"></i>
+                        نیا پروجیکٹ یا اپڈیٹ
+                    </h3>
+                    <form id="projectForm">
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px;">
+                            <div class="form-group">
+                                <label data-translate="projectNameLabel">
+                                    <i class="fas fa-project-diagram"></i> پروجیکٹ کا نام:
+                                </label>
+                                <input type="text" class="form-control" id="projectName" required 
+                                       data-translate-placeholder="projectNamePlaceholder" placeholder="پروجیکٹ کا نام درج کریں">
+                            </div>
+                            <div class="form-group">
+                                <label data-translate="projectCategoryLabel">
+                                    <i class="fas fa-tags"></i> قسم:
+                                </label>
+                                <select class="form-control" id="projectCategory">
+                                    <option value="construction" data-translate="catConstruction">تعمیرات</option>
+                                    <option value="education" data-translate="catEducation">تعلیم</option>
+                                    <option value="community" data-translate="catCommunity">کمیونٹی</option>
+                                    <option value="religious" data-translate="catReligious">مذہبی</option>
+                                    <option value="charity" data-translate="catCharity">خیرات</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label data-translate="projectDescLabel">
+                                <i class="fas fa-align-left"></i> تفصیلی وضاحت:
+                            </label>
+                            <textarea class="form-control" id="projectDesc" rows="4" required 
+                                      data-translate-placeholder="projectDescPlaceholder" 
+                                      placeholder="پروجیکٹ کی تفصیلی معلومات اور مقاصد"></textarea>
+                        </div>
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px;">
+                            <div class="form-group">
+                                <label data-translate="projectProgressLabel">
+                                    <i class="fas fa-percentage"></i> پیش قدمی (%):
+                                </label>
+                                <input type="range" class="form-control" id="projectProgressRange" min="0" max="100" value="0" 
+                                       oninput="updateProgressValue(this.value)">
+                                <div style="text-align: center; margin-top: 5px; font-weight: bold; color: var(--primary-green);">
+                                    <span id="progressValue">0</span>%
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label data-translate="projectStatusLabel">
+                                    <i class="fas fa-flag"></i> حالت:
+                                </label>
+                                <select class="form-control" id="projectStatus">
+                                    <option value="planning" data-translate="statusPlanning">منصوبہ بندی</option>
+                                    <option value="active" data-translate="statusActive">فعال</option>
+                                    <option value="paused" data-translate="statusPaused">رک گیا</option>
+                                    <option value="completed" data-translate="statusCompleted">مکمل</option>
+                                    <option value="cancelled" data-translate="statusCancelled">منسوخ</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;">
+                            <div class="form-group">
+                                <label data-translate="projectStartLabel">
+                                    <i class="fas fa-calendar-alt"></i> شروعات کی تاریخ:
+                                </label>
+                                <input type="date" class="form-control" id="projectStartDate">
+                            </div>
+                            <div class="form-group">
+                                <label data-translate="projectBudgetLabel">
+                                    <i class="fas fa-rupee-sign"></i> بجٹ (اختیاری):
+                                </label>
+                                <input type="number" class="form-control" id="projectBudget" 
+                                       data-translate-placeholder="budgetPlaceholder" placeholder="مثال: 50000">
+                            </div>
+                        </div>
+                        <button type="submit" class="btn">
+                            <i class="fas fa-save" style="margin-left: 8px;"></i>
+                            <span data-translate="saveProjectBtn">پروجیکٹ محفوظ کریں</span>
+                        </button>
+                    </form>
+                </div>
+
+                <div class="card">
+                    <h3 data-translate="projectsListTitle">
+                        <i class="fas fa-tasks" style="margin-left: 10px; color: var(--accent-gold);"></i>
+                        تمام پروجیکٹس
+                    </h3>
+                    <div class="project-list" id="projectsList"></div>
+                </div>
+            </section>
+
+            <!-- Gallery Section -->
+            <section id="gallery" class="section">
+                <h2 class="section-title" data-translate="galleryTitle">تصاویری گیلری</h2>
+                
+                <div class="card">
+                    <h3 data-translate="uploadPhotoTitle">
+                        <i class="fas fa-camera" style="margin-left: 10px; color: var(--accent-gold);"></i>
+                        تصویر اپلوڈ کریں
+                    </h3>
+                    <form id="photoForm">
+                        <div class="form-group">
+                            <label data-translate="photoFileLabel">
+                                <i class="fas fa-image"></i> تصویر منتخب کریں:
+                            </label>
+                            <input type="file" class="form-control" id="photoFile" accept="image/*">
+                        </div>
+                        <div class="form-group">
+                            <label data-translate="photoCaptionLabel">
+                                <i class="fas fa-comment"></i> تصویر کی تفصیل:
+                            </label>
+                            <input type="text" class="form-control" id="photoCaption" 
+                                   data-translate-placeholder="photoCaptionPlaceholder" placeholder="تصویر کے بارے میں مختصر بیان">
+                        </div>
+                        <button type="submit" class="btn">
+                            <i class="fas fa-upload" style="margin-left: 8px;"></i>
+                            <span data-translate="uploadBtn">اپلوڈ کریں</span>
+                        </button>
+                    </form>
+                </div>
+
+                <div class="card">
+                    <div id="photoGallery" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px;">
+                        <!-- Sample gallery items -->
+                        <div class="gallery-item" style="background: #f8f9fa; border-radius: 15px; padding: 15px; text-align: center;">
+                            <div style="width: 100%; height: 150px; background: var(--accent-gold); border-radius: 10px; display: flex; align-items: center; justify-content: center; margin-bottom: 10px;">
+                                <i class="fas fa-mosque" style="font-size: 48px; color: var(--primary-green);"></i>
+                            </div>
+                            <div style="font-weight: bold; margin-bottom: 5px;" data-translate="sampleImage1">تنظیم کا دفتر</div>
+                            <div style="font-size: 14px; color: var(--text-light);" data-translate="sampleDate1">5 اگست 2025</div>
+                        </div>
+                        <div class="gallery-item" style="background: #f8f9fa; border-radius: 15px; padding: 15px; text-align: center;">
+                            <div style="width: 100%; height: 150px; background: var(--accent-gold); border-radius: 10px; display: flex; align-items: center; justify-content: center; margin-bottom: 10px;">
+                                <i class="fas fa-users" style="font-size: 48px; color: var(--primary-green);"></i>
+                            </div>
+                            <div style="font-weight: bold; margin-bottom: 5px;" data-translate="sampleImage2">ممبرز کا اجلاس</div>
+                            <div style="font-size: 14px; color: var(--text-light);" data-translate="sampleDate2">1 اگست 2025</div>
+                        </div>
+                        <div class="gallery-item" style="background: #f8f9fa; border-radius: 15px; padding: 15px; text-align: center;">
+                            <div style="width: 100%; height: 150px; background: var(--accent-gold); border-radius: 10px; display: flex; align-items: center; justify-content: center; margin-bottom: 10px;">
+                                <i class="fas fa-hammer" style="font-size: 48px; color: var(--primary-green);"></i>
+                            </div>
+                            <div style="font-weight: bold; margin-bottom: 5px;" data-translate="sampleImage3">تعمیراتی کام</div>
+                            <div style="font-size: 14px; color: var(--text-light);" data-translate="sampleDate3">25 جولائی 2025</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Reports Section -->
+            <section id="reports" class="section">
+                <h2 class="section-title" data-translate="reportsTitle">رپورٹس اور اعداد و شمار</h2>
+                
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px;">
+                    <div class="card">
+                        <h3 data-translate="monthlyReportTitle">
+                            <i class="fas fa-calendar-month" style="color: var(--accent-gold);"></i>
+                            ماہانہ رپورٹ
+                        </h3>
+                        <div style="text-align: center; margin: 20px 0;">
+                            <canvas id="monthlyChart" width="300" height="200"></canvas>
+                        </div>
+                        <div style="background: #f8f9fa; padding: 15px; border-radius: 10px;">
+                            <div style="display: flex; justify-content: space-between; margin: 5px 0;">
+                                <span data-translate="newMembers">نئے ممبرز:</span>
+                                <strong id="newMembersCount">5</strong>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; margin: 5px 0;">
+                                <span data-translate="activeProjects">فعال پروجیکٹس:</span>
+                                <strong id="activeProjectsCount">1</strong>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; margin: 5px 0;">
+                                <span data-translate="completedTasks">مکمل کام:</span>
+                                <strong id="completedTasksCount">12</strong>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <h3 data-translate="activityLogTitle">
+                            <i class="fas fa-clipboard-list" style="color: var(--accent-gold);"></i>
+                            حالیہ سرگرمیاں
+                        </h3>
+                        <div id="activityLog" style="max-height: 300px; overflow-y: auto;">
+                            <div class="activity-item" style="padding: 10px; border-left: 3px solid var(--accent-gold); margin: 10px 0; background: #f8f9fa; border-radius: 8px;">
+                                <div style="font-weight: bold;" data-translate="activity1">نیا ممبر شامل</div>
+                                <div style="font-size: 14px; color: var(--text-light);">2 گھنٹے پہلے</div>
+                            </div>
+                            <div class="activity-item" style="padding: 10px; border-left: 3px solid var(--secondary-green); margin: 10px 0; background: #f8f9fa; border-radius: 8px;">
+                                <div style="font-weight: bold;" data-translate="activity2">پروجیکٹ اپڈیٹ</div>
+                                <div style="font-size: 14px; color: var(--text-light);">1 دن پہلے</div>
+                            </div>
+                            <div class="activity-item" style="padding: 10px; border-left: 3px solid var(--primary-green); margin: 10px 0; background: #f8f9fa; border-radius: 8px;">
+                                <div style="font-weight: bold;" data-translate="activity3">اجلاس منعقد</div>
+                                <div style="font-size: 14px; color: var(--text-light);">3 دن پہلے</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3 data-translate="exportDataTitle">
+                        <i class="fas fa-file-export" style="margin-left: 10px; color: var(--accent-gold);"></i>
+                        ڈیٹا ایکسپورٹ کریں
+                    </h3>
+                    <div style="display: flex; gap: 15px; flex-wrap: wrap; margin-top: 20px;">
+                        <button class="btn" onclick="exportMembers()">
+                            <i class="fas fa-users"></i> <span data-translate="exportMembers">ممبرز کی فہرست</span>
+                        </button>
+                        <button class="btn" onclick="exportProjects()">
+                            <i class="fas fa-tasks"></i> <span data-translate="exportProjects">پروجیکٹس کی تفصیلات</span>
+                        </button>
+                        <button class="btn" onclick="generateReport()">
+                            <i class="fas fa-file-pdf"></i> <span data-translate="generateReport">مکمل رپورٹ</span>
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- About Section -->
+            <section id="about" class="section">
+                <h2 class="section-title" data-translate="aboutTitle">تنظیم کا تعارف</h2>
+                
+                <div class="card">
+                    <h3 data-translate="orgIntroTitle">ملؔت اسلامی</h3>
+                    <p data-translate="orgIntroDesc">
+                        یہ ایک غیر سرکاری تنظیم ہے جو حنفی فقہ کے تحت اہل سنت والجماعت کے عقائد کی روشنی میں کام کرتی ہے۔ ہماری تنظیم کا بنیادی مقصد اسلامی معاشرے کی خدمت اور دینی تراث کا تحفظ ہے۔
+                    </p>
+                </div>
+
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px;">
+                    <div class="card">
+                        <h3 data-translate="objectivesTitle">
+                            <i class="fas fa-bullseye" style="color: var(--accent-gold);"></i>
+                            ہمارے اہداف
+                        </h3>
+                        <ul style="list-style: none; padding-right: 0;">
+                            <li style="padding: 8px 0; border-bottom: 1px solid #eee;">
+                                <i class="fas fa-check-circle" style="color: var(--secondary-green); margin-left: 10px;"></i>
+                                <span data-translate="obj1">دینی جماعتوں کی رہنمائی</span>
+                            </li>
+                            <li style="padding: 8px 0; border-bottom: 1px solid #eee;">
+                                <i class="fas fa-check-circle" style="color: var(--secondary-green); margin-left: 10px;"></i>
+                                <span data-translate="obj2">قرآن و حدیث کا تحفظ</span>
+                            </li>
+                            <li style="padding: 8px 0; border-bottom: 1px solid #eee;">
+                                <i class="fas fa-check-circle" style="color: var(--secondary-green); margin-left: 10px;"></i>
+                                <span data-translate="obj3">صحیح اسلامی تعلیمات</span>
+                            </li>
+                            <li style="padding: 8px 0; border-bottom: 1px solid #eee;">
+                                <i class="fas fa-check-circle" style="color: var(--secondary-green); margin-left: 10px;"></i>
+                                <span data-translate="obj4">کمیونٹی کی خدمت</span>
+                            </li>
+                            <li style="padding: 8px 0;">
+                                <i class="fas fa-check-circle" style="color: var(--secondary-green); margin-left: 10px;"></i>
+                                <span data-translate="obj5">دینی تراث کا تحفظ</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="card">
+                        <h3 data-translate="leadershipTitle">
+                            <i class="fas fa-crown" style="color: var(--accent-gold);"></i>
+                            قیادت
+                        </h3>
+                        <div style="text-align: center; padding: 20px; background: linear-gradient(135deg, var(--primary-green), var(--secondary-green)); color: white; border-radius: 15px;">
+                            <div style="width: 80px; height: 80px; background: var(--accent-gold); border-radius: 50%; margin: 0 auto 15px; display: flex; align-items: center; justify-content: center; font-size: 32px; color: var(--primary-green);">ق</div>
+                            <h4 data-translate="leaderName">قاضی ارشاد حسین قریشی</h4>
+                            <p data-translate="leaderTitle">استاد دین اور صدر تنظیم</p>
+                            <p style="margin-top: 10px; font-size: 14px; opacity: 0.9;" data-translate="leaderDetail">
+                                تمام تنظیمی سرگرمیوں کی نگرانی اور دینی و سماجی پروجیکٹس میں رہنمائی فراہم کرتے ہیں
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3 data-translate="contactInfoTitle">
+                        <i class="fas fa-address-card" style="margin-left: 10px; color: var(--accent-gold);"></i>
+                        رابطے کی معلومات
+                    </h3>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;">
+                        <div>
+                            <p><i class="fas fa-map-marker-alt" style="color: var(--accent-gold); margin-left: 10px;"></i>
+                               <strong data-translate="locationLabel">مقام:</strong> <span data-translate="location">سرینگر، جموں وکشمیر، انڈیا</span></p>
+                            <p><i class="fas fa-building" style="color: var(--accent-gold); margin-left: 10px;"></i>
+                               <strong data-translate="typeLabel">قسم:</strong> <span data-translate="orgType">غیر سرکاری دینی تنظیم</span></p>
+                            <p><i class="fas fa-book" style="color: var(--accent-gold); margin-left: 10px;"></i>
+                               <strong data-translate="fiqhLabel">فقہ:</strong> <span data-translate="fiqhType">حنفی - اہل سنت والجماعت</span></p>
+                        </div>
+                        <div>
+                            <p><i class="fas fa-calendar" style="color: var(--accent-gold); margin-left: 10px;"></i>
+                               <strong data-translate="establishedLabel">قائم:</strong> <span data-translate="established">2020</span></p>
+                            <p><i class="fas fa-users" style="color: var(--accent-gold); margin-left: 10px;"></i>
+                               <strong data-translate="membersLabel">کل ممبرز:</strong> <span id="totalMembersAbout">25+</span></p>
+                            <p><i class="fas fa-heart" style="color: var(--accent-gold); margin-left: 10px;"></i>
+                               <strong data-translate="missionLabel">مشن:</strong> <span data-translate="mission">اسلامی تعلیمات کی ترویج</span></p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card" style="background: linear-gradient(135deg, rgba(26, 95, 63, 0.1), rgba(212, 175, 55, 0.1)); border: 2px solid var(--accent-gold);">
+                    <h3 data-translate="specialThanks" style="text-align: center; color: var(--primary-green);">
+                        <i class="fas fa-hands-praying" style="margin-left: 10px;"></i>
+                        خصوصی شکریہ
+                    </h3>
+                    <p style="text-align: center; font-size: 18px; line-height: 1.8;" data-translate="thanksMessage">
+                        اللہ تعالیٰ کا شکر ہے کہ اس کی توفیق سے ہم اپنے مقاصد کی تکمیل میں کامیاب ہو رہے ہیں۔ تمام ممبرز اور معاونین کا دل سے شکریہ۔
+                    </p>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <script>
+        // Language Translations
+        const translations = {
+            ur: {
+                // Navigation
+                orgName: "ملؔت اسلامی",
+                orgSubtitle: "حنفی فقہ • اہل سنت",
+                navHome: "ہوم",
+                navMembers: "ممبرز",
+                navProjects: "پروجیکٹس",
+                navGallery: "گیلری",
+                navReports: "رپورٹس",
+                navAbout: "تعارف",
+                
+                // Home Page
+                bismillah: "﴿ بِسْمِ اللَّهِ الرَّحْمَـٰنِ الرَّحِيمِ ﴾",
+                welcomeTitle: "ملؔت اسلامی میں خوش آمدید",
+                leaderName: "قاضی ارشاد حسین قریشی",
+                leaderTitle: "صدر تنظیم اور استاد دین",
+                leaderDesc: "آپ کی کریمانہ رہنمائی میں ہم اسلامی خدمات انجام دے رہے ہیں",
+                statMembers: "رجسٹرڈ ممبرز",
+                statProjects: "فعال پروجیکٹس",
+                statFiqh: "حنفی فقہ",
+                statYears: "سال کا تجربہ",
+                currentProjectTitle: "موجودہ پروجیکٹ: قرآنی کتب کا تحفظ گھر",
+                currentProjectDesc: "فی الوقت ہم زیر زمین خندق کے ساتھ کوٹھری کی تعمیر کر رہے ہیں تاکہ خراب قرآن مجید اور دینی کتابوں کو محفوظ رکھا جا سکے۔",
+                projectProgress: "پروجیکٹ کی پیش قدمی:",
+                completed: "مکمل:",
+                inProgress: "جاری:",
+                completedTasks: "بنیادی کام، منصوبہ بندی",
+                currentTasks: "تعمیراتی کام، مواد خریداری",
+                
+                // Members Section
+                membersTitle: "ممبرز کا انتظام",
+                addMemberTitle: "نیا ممبر شامل کریں",
+                memberNameLabel: "مکمل نام:",
+                memberRoleLabel: "عہدہ/کردار:",
+                memberPhoneLabel: "فون نمبر:",
+                memberEmailLabel: "ای میل (اختیاری):",
+                memberNotesLabel: "اضافی معلومات:",
+                memberNamePlaceholder: "ممبر کا پورا نام درج کریں",
+                memberPhonePlaceholder: "+91-1234567890",
+                memberEmailPlaceholder: "email@example.com",
+                memberNotesPlaceholder: "کوئی اضافی تفصیلات یا خصوصی ذمہ داریاں",
+                selectRole: "عہدہ منتخب کریں",
+                rolePresident: "صدر",
+                roleVicePresident: "نائب صدر",
+                roleSecretary: "سکریٹری",
+                roleTreasurer: "خزانچی",
+                roleMember: "ممبر",
+                roleVolunteer: "رضاکار",
+                addMemberBtn: "ممبر شامل کریں",
+                membersListTitle: "تمام رجسٹرڈ ممبرز",
+                searchMembers: "ممبر تلاش کریں...",
+                allRoles: "تمام عہدے",
+                exportBtn: "ایکسپورٹ",
+                
+                // Projects Section
+                projectsTitle: "پروجیکٹس کا انتظام",
+                addProjectTitle: "نیا پروجیکٹ یا اپڈیٹ",
+                projectNameLabel: "پروجیکٹ کا نام:",
+                projectCategoryLabel: "قسم:",
+                projectDescLabel: "تفصیلی وضاحت:",
+                projectProgressLabel: "پیش قدمی (%):",
+                projectStatusLabel: "حالت:",
+                projectStartLabel: "شروعات کی تاریخ:",
+                projectBudgetLabel: "بجٹ (اختیاری):",
+                projectNamePlaceholder: "پروجیکٹ کا نام درج کریں",
+                projectDescPlaceholder: "پروجیکٹ کی تفصیلی معلومات اور مقاصد",
+                budgetPlaceholder: "مثال: 50000",
+                catConstruction: "تعمیرات",
+                catEducation: "تعلیم",
+                catCommunity: "کمیونٹی",
+                catReligious: "مذہبی",
+                catCharity: "خیرات",
+                statusPlanning: "منصوبہ بندی",
+                statusActive: "فعال",
+                statusPaused: "رک گیا",
+                statusCompleted: "مکمل",
+                statusCancelled: "منسوخ",
+                saveProjectBtn: "پروجیکٹ محفوظ کریں",
+                projectsListTitle: "تمام پروجیکٹس",
+                
+                // Gallery
+                galleryTitle: "تصاویری گیلری",
+                uploadPhotoTitle: "تصویر اپلوڈ کریں",
+                photoFileLabel: "تصویر منتخب کریں:",
+                photoCaptionLabel: "تصویر کی تفصیل:",
+                photoCaptionPlaceholder: "تصویر کے بارے میں مختصر بیان",
+                uploadBtn: "اپلوڈ کریں",
+                sampleImage1: "تنظیم کا دفتر",
+                sampleImage2: "ممبرز کا اجلاس",
+                sampleImage3: "تعمیراتی کام",
+                sampleDate1: "5 اگست 2025",
+                sampleDate2: "1 اگست 2025",
+                sampleDate3: "25 جولائی 2025",
+                
+                // Reports
+                reportsTitle: "رپورٹس اور اعداد و شمار",
+                monthlyReportTitle: "ماہانہ رپورٹ",
+                newMembers: "نئے ممبرز:",
+                activeProjects: "فعال پروجیکٹس:",
+                completedTasks: "مکمل کام:",
+                activityLogTitle: "حالیہ سرگرمیاں",
+                activity1: "نیا ممبر شامل",
+                activity2: "پروجیکٹ اپڈیٹ",
+                activity3: "اجلاس منعقد",
+                exportDataTitle: "ڈیٹا ایکسپورٹ کریں",
+                exportMembers: "ممبرز کی فہرست",
+                exportProjects: "پروجیکٹس کی تفصیلات",
+                generateReport: "مکمل رپورٹ",
+                
+                // About
+                aboutTitle: "تنظیم کا تعارف",
+                orgIntroTitle: "ملؔت اسلامی",
+                orgIntroDesc: "یہ ایک غیر سرکاری تنظیم ہے جو حنفی فقہ کے تحت اہل سنت والجماعت کے عقائد کی روشنی میں کام کرتی ہے۔",
+                objectivesTitle: "ہمارے اہداف",
+                obj1: "دینی جماعتوں کی رہنمائی",
+                obj2: "قرآن و حدیث کا تحفظ",
+                obj3: "صحیح اسلامی تعلیمات",
+                obj4: "کمیونٹی کی خدمت",
+                obj5: "دینی تراث کا تحفظ",
+                leadershipTitle: "قیادت",
+                leaderDetail: "تمام تنظیمی سرگرمیوں کی نگرانی اور دینی و سماجی پروجیکٹس میں رہنمائی فراہم کرتے ہیں",
+                contactInfoTitle: "رابطے کی معلومات",
+                locationLabel: "مقام:",
+                location: "سرینگر، جموں وکشمیر، انڈیا",
+                typeLabel: "قسم:",
+                orgType: "غیر سرکاری دینی تنظیم",
+                fiqhLabel: "فقہ:",
+                fiqhType: "حنفی - اہل سنت والجماعت",
+                establishedLabel: "قائم:",
+                established: "2020",
+                membersLabel: "کل ممبرز:",
+                missionLabel: "مشن:",
+                mission: "اسلامی تعلیمات کی ترویج",
+                specialThanks: "خصوصی شکریہ",
+                thanksMessage: "اللہ تعالیٰ کا شکر ہے کہ اس کی توفیق سے ہم اپنے مقاصد کی تکمیل میں کامیاب ہو رہے ہیں۔"
+            },
+            en: {
+                // Navigation
+                orgName: "Millat-e-Islami",
+                orgSubtitle: "Hanafi Fiqh • Ahle Sunnat",
+                navHome: "Home",
+                navMembers: "Members",
+                navProjects: "Projects",
+                navGallery: "Gallery",
+                navReports: "Reports",
+                navAbout: "About",
+                
+                // Home Page
+                bismillah: "﴿ In the Name of Allah, the Most Gracious, the Most Merciful ﴾",
+                welcomeTitle: "Welcome to Millat-e-Islami",
+                leaderName: "Qazi Irshad Hussain Qureshi",
+                leaderTitle: "President & Religious Teacher",
+                leaderDesc: "Under his gracious guidance, we are serving Islamic causes",
+                statMembers: "Registered Members",
+                statProjects: "Active Projects",
+                statFiqh: "Hanafi Fiqh",
+                statYears: "Years of Experience",
+                currentProjectTitle: "Current Project: Quran Protection House",
+                currentProjectDesc: "Currently building an underground trench with hut to safeguard damaged Qurans and religious books.",
+                projectProgress: "Project Progress:",
+                completed: "Completed:",
+                inProgress: "In Progress:",
+                completedTasks: "Foundation work, Planning",
+                currentTasks: "Construction work, Material purchase",
+                
+                // Members Section
+                membersTitle: "Members Management",
+                addMemberTitle: "Add New Member",
+                memberNameLabel: "Full Name:",
+                memberRoleLabel: "Position/Role:",
+                memberPhoneLabel: "Phone Number:",
+                memberEmailLabel: "Email (Optional):",
+                memberNotesLabel: "Additional Information:",
+                memberNamePlaceholder: "Enter member's full name",
+                memberPhonePlaceholder: "+91-1234567890",
+                memberEmailPlaceholder: "email@example.com",
+                memberNotesPlaceholder: "Any additional details or special responsibilities",
+                selectRole: "Select Position",
+                rolePresident: "President",
+                roleVicePresident: "Vice President",
+                roleSecretary: "Secretary",
+                roleTreasurer: "Treasurer",
+                roleMember: "Member",
+                roleVolunteer: "Volunteer",
+                addMemberBtn: "Add Member",
+                membersListTitle: "All Registered Members",
+                searchMembers: "Search members...",
+                allRoles: "All Positions",
+                exportBtn: "Export",
+                
+                // Projects Section
+                projectsTitle: "Projects Management",
+                addProjectTitle: "Add New Project or Update",
+                projectNameLabel: "Project Name:",
+                projectCategoryLabel: "Category:",
+                projectDescLabel: "Detailed Description:",
+                projectProgressLabel: "Progress (%):",
+                projectStatusLabel: "Status:",
+                projectStartLabel: "Start Date:",
+                projectBudgetLabel: "Budget (Optional):",
+                projectNamePlaceholder: "Enter project name",
+                projectDescPlaceholder: "Detailed project information and objectives",
+                budgetPlaceholder: "Example: 50000",
+                catConstruction: "Construction",
+                catEducation: "Education",
+                catCommunity: "Community",
+                catReligious: "Religious",
+                catCharity: "Charity",
+                statusPlanning: "Planning",
+                statusActive: "Active",
+                statusPaused: "Paused",
+                statusCompleted: "Completed",
+                statusCancelled: "Cancelled",
+                saveProjectBtn: "Save Project",
+                projectsListTitle: "All Projects",
+                
+                // Gallery
+                galleryTitle: "Photo Gallery",
+                uploadPhotoTitle: "Upload Photo",
+                photoFileLabel: "Select Image:",
+                photoCaptionLabel: "Photo Description:",
+                photoCaptionPlaceholder: "Brief description about the photo",
+                uploadBtn: "Upload",
+                sampleImage1: "Organization Office",
+                sampleImage2: "Members Meeting",
+                sampleImage3: "Construction Work",
+                sampleDate1: "August 5, 2025",
+                sampleDate2: "August 1, 2025",
+                sampleDate3: "July 25, 2025",
+                
+                // Reports
+                reportsTitle: "Reports and Statistics",
+                monthlyReportTitle: "Monthly Report",
+                newMembers: "New Members:",
+                activeProjects: "Active Projects:",
+                completedTasks: "Completed Tasks:",
+                activityLogTitle: "Recent Activities",
+                activity1: "New member added",
+                activity2: "Project updated",
+                activity3: "Meeting held",
+                exportDataTitle: "Export Data",
+                exportMembers: "Members List",
+                exportProjects: "Projects Details",
+                generateReport: "Complete Report",
+                
+                // About
+                aboutTitle: "About Organization",
+                orgIntroTitle: "Millat-e-Islami",
+                orgIntroDesc: "A non-governmental organization working under Hanafi Fiqh following Ahle Sunnat Wal Jamaat beliefs.",
+                objectivesTitle: "Our Objectives",
+                obj1: "Religious congregation guidance",
+                obj2: "Protection of Quran and Hadith",
+                obj3: "Correct Islamic teachings",
+                obj4: "Community service",
+                obj5: "Religious heritage preservation",
+                leadershipTitle: "Leadership",
+                leaderDetail: "Overseeing all organizational activities and providing guidance in religious and social projects",
+                contactInfoTitle: "Contact Information",
+                locationLabel: "Location:",
+                location: "Srinagar, Jammu and Kashmir, India",
+                typeLabel: "Type:",
+                orgType: "Non-governmental Religious Organization",
+                fiqhLabel: "Fiqh:",
+                fiqhType: "Hanafi - Ahle Sunnat Wal Jamaat",
+                establishedLabel: "Established:",
+                established: "2020",
+                membersLabel: "Total Members:",
+                missionLabel: "Mission:",
+                mission: "Promotion of Islamic teachings",
+                specialThanks: "Special Thanks",
+                thanksMessage: "Thanks to Allah for His blessings that help us achieve our objectives successfully."
+            },
+            ar: {
+                // Navigation
+                orgName: "ملؔت اسلامی",
+                orgSubtitle: "الفقه الحنفي • أهل السنة",
+                navHome: "الرئيسية",
+                navMembers: "الأعضاء",
+                navProjects: "المشاريع",
+                navGallery: "المعرض",
+                navReports: "التقارير",
+                navAbout: "عنا",
+                
+                // Home Page
+                bismillah: "﴿ بِسْمِ اللَّهِ الرَّحْمَـٰنِ الرَّحِيمِ ﴾",
+                welcomeTitle: "أهلاً وسهلاً في ملؔت اسلامی",
+                leaderName: "القاضي إرشاد حسين قريشي",
+                leaderTitle: "رئيس المنظمة والمعلم الديني",
+                leaderDesc: "تحت إشرافه الكريم نقوم بخدمة الإسلام",
+                statMembers: "الأعضاء المسجلون",
+                statProjects: "المشاريع النشطة",
+                statFiqh: "الفقه الحنفي",
+                statYears: "سنوات الخبرة",
+                currentProjectTitle: "المشروع الحالي: بيت حماية القرآن",
+                currentProjectDesc: "نعمل حالياً على بناء خندق تحت الأرض مع كوخ لحماية المصاحف والكتب الدينية التالفة.",
+                projectProgress: "تقدم المشروع:",
+                completed: "مكتمل:",
+                inProgress: "جاري:",
+                completedTasks: "الأعمال الأساسية، التخطيط",
+                currentTasks: "أعمال البناء، شراء المواد",
+                
+                // Members Section
+                membersTitle: "إدارة الأعضاء",
+                addMemberTitle: "إضافة عضو جديد",
+                memberNameLabel: "الاسم الكامل:",
+                memberRoleLabel: "المنصب/الدور:",
+                memberPhoneLabel: "رقم الهاتف:",
+                memberEmailLabel: "البريد الإلكتروني (اختياري):",
+                memberNotesLabel: "معلومات إضافية:",
+                memberNamePlaceholder: "أدخل الاسم الكامل للعضو",
+                memberPhonePlaceholder: "+91-1234567890",
+                memberEmailPlaceholder: "email@example.com",
+                memberNotesPlaceholder: "أي تفاصيل إضافية أو مسؤوليات خاصة",
+                selectRole: "اختر المنصب",
+                rolePresident: "الرئيس",
+                roleVicePresident: "نائب الرئيس",
+                roleSecretary: "السكرتير",
+                roleTreasurer: "أمين الصندوق",
+                roleMember: "عضو",
+                roleVolunteer: "متطوع",
+                addMemberBtn: "إضافة عضو",
+                membersListTitle: "جميع الأعضاء المسجلين",
+                searchMembers: "البحث في الأعضاء...",
+                allRoles: "جميع المناصب",
+                exportBtn: "تصدير",
+                
+                // Projects Section
+                projectsTitle: "إدارة المشاريع",
+                addProjectTitle: "إضافة مشروع جديد أو تحديث",
+                projectNameLabel: "اسم المشروع:",
+                projectCategoryLabel: "الفئة:",
+                projectDescLabel: "الوصف التفصيلي:",
+                projectProgressLabel: "التقدم (%):",
+                projectStatusLabel: "الحالة:",
+                projectStartLabel: "تاريخ البداية:",
+                projectBudgetLabel: "الميزانية (اختياري):",
+                projectNamePlaceholder: "أدخل اسم المشروع",
+                projectDescPlaceholder: "معلومات المشروع التفصيلية والأهداف",
+                budgetPlaceholder: "مثال: 50000",
+                catConstruction: "البناء",
+                catEducation: "التعليم",
+                catCommunity: "المجتمع",
+                catReligious: "ديني",
+                catCharity: "الخيرية",
+                statusPlanning: "التخطيط",
+                statusActive: "نشط",
+                statusPaused: "متوقف",
+                statusCompleted: "مكتمل",
+                statusCancelled: "ملغي",
+                saveProjectBtn: "حفظ المشروع",
+                projectsListTitle: "جميع المشاريع",
+                
+                // Gallery
+                galleryTitle: "معرض الصور",
+                uploadPhotoTitle: "رفع صورة",
+                photoFileLabel: "اختر الصورة:",
+                photoCaptionLabel: "وصف الصورة:",
+                photoCaptionPlaceholder: "وصف موجز عن الصورة",
+                uploadBtn: "رفع",
+                sampleImage1: "مكتب المنظمة",
+                sampleImage2: "اجتماع الأعضاء",
+                sampleImage3: "أعمال البناء",
+                sampleDate1: "5 أغسطس 2025",
+                sampleDate2: "1 أغسطس 2025",
+                sampleDate3: "25 يوليو 2025",
+                
+                // Reports
+                reportsTitle: "التقارير والإحصائيات",
+                monthlyReportTitle: "التقرير الشهري",
+                newMembers: "أعضاء جدد:",
+                activeProjects: "مشاريع نشطة:",
+                completedTasks: "مهام مكتملة:",
+                activityLogTitle: "الأنشطة الحديثة",
+                activity1: "تم إضافة عضو جديد",
+                activity2: "تم تحديث المشروع",
+                activity3: "تم عقد اجتماع",
+                exportDataTitle: "تصدير البيانات",
+                exportMembers: "قائمة الأعضاء",
+                exportProjects: "تفاصيل المشاريع",
+                generateReport: "تقرير كامل",
+                
+                // About
+                aboutTitle: "عن المنظمة",
+                orgIntroTitle: "ملؔت اسلامی",
+                orgIntroDesc: "منظمة غير حكومية تعمل تحت الفقه الحنفي وفقاً لعقائد أهل السنة والجماعة.",
+                objectivesTitle: "أهدافنا",
+                obj1: "إرشاد التجمعات الدينية",
+                obj2: "حماية القرآن والحديث",
+                obj3: "التعاليم الإسلامية الصحيحة",
+                obj4: "خدمة المجتمع",
+                obj5: "الحفاظ على التراث الديني",
+                leadershipTitle: "القيادة",
+                leaderDetail: "الإشراف على جميع الأنشطة التنظيمية وتوجيه المشاريع الدينية والاجتماعية",
+                contactInfoTitle: "معلومات الاتصال",
+                locationLabel: "الموقع:",
+                location: "سرينغار، جامو وكشمير، الهند",
+                typeLabel: "النوع:",
+                orgType: "منظمة دينية غير حكومية",
+                fiqhLabel: "الفقه:",
+                fiqhType: "حنفي - أهل السنة والجماعة",
+                establishedLabel: "التأسيس:",
+                established: "2020",
+                membersLabel: "إجمالي الأعضاء:",
+                missionLabel: "المهمة:",
+                mission: "نشر التعاليم الإسلامية",
+                specialThanks: "شكر خاص",
+                thanksMessage: "الحمد لله الذي وفقنا لتحقيق أهدافنا بنجاح."
+            }
+        };
+
+        let currentLanguage = 'ur';
+        let members = [
+            {
+                id: 1,
+                name: "قاضی ارشاد حسین قریشی",
+                role: "president",
+                phone: "+91-1234567890",
+                email: "qazi@millateislami.org",
+                notes: "صدر تنظیم اور استاد دین",
+                joinDate: "2020-01-01"
+            }
+        ];
+
+        let projects = [
+            {
+                id: 1,
+                name: "قرآنی کتب کا تحفظ گھر",
+                description: "زیر زمین خندق کے ساتھ کوٹھری کی تعمیر",
+                progress: 35,
+                status: "active",
+                category: "construction",
+                startDate: "2025-01-01",
+                budget: 100000
+            }
+        ];
+
+        let photos = [];
+        let activityLog = [];
+
+        // Language Functions
+        function changeLanguage(lang) {
+            currentLanguage = lang;
+            
+            // Update active language button
+            document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            // Update body class and direction
+            document.body.className = document.body.className.replace(/\b(english|arabic)\b/g, '');
+            if (lang === 'en') {
+                document.body.classList.add('english');
+                document.body.dir = 'ltr';
+            } else if (lang === 'ar') {
+                document.body.dir = 'rtl';
+            } else {
+                document.body.dir = 'rtl';
+            }
+            
+            // Update all translatable elements
+            updateTranslations();
+        }
+
+        function updateTranslations() {
+            const translation = translations[currentLanguage] || translations.ur;
+            
+            document.querySelectorAll('[data-translate]').forEach(element => {
+                const key = element.getAttribute('data-translate');
+                if (translation[key]) {
+                    element.textContent = translation[key];
+                }
+            });
+            
+            // Update placeholders
+            document.querySelectorAll('[data-translate-placeholder]').forEach(element => {
+                const key = element.getAttribute('data-translate-placeholder');
+                if (translation[key]) {
+                    element.placeholder = translation[key];
+                }
+            });
+        }
+
+        // Theme Toggle
+        function toggleTheme() {
+            document.body.classList.toggle('dark-theme');
+            const themeIcon = document.querySelector('.theme-toggle i');
+            if (document.body.classList.contains('dark-theme')) {
+                themeIcon.className = 'fas fa-sun';
+            } else {
+                themeIcon.className = 'fas fa-moon';
+            }
+        }
+
+        // Navigation
+        function showSection(sectionName) {
+            document.querySelectorAll('.section').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            document.getElementById(sectionName).classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        // Notification System
+        function showNotification(message, type = 'success') {
+            const notification = document.getElementById('notification');
+            const notificationText = document.getElementById('notificationText');
+            
+            notificationText.textContent = message;
+            notification.className = `notification ${type} show`;
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
+        }
+
+        // Member Management
+        document.getElementById('memberForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const member = {
+                id: Date.now(),
+                name: document.getElementById('memberName').value,
+                role: document.getElementById('memberRole').value,
+                phone: document.getElementById('memberPhone').value,
+                email: document.getElementById('memberEmail').value,
+                notes: document.getElementById('memberNotes').value,
+                joinDate: new Date().toISOString().split('T')[0]
+            };
+            
+            members.push(member);
+            displayMembers();
+            updateStats();
+            addActivity(`نیا ممبر شامل: ${member.name}`);
+            
+            this.reset();
+            showNotification('ممبر کامیابی سے شامل کر دیا گیا!');
+        });
+
+        function displayMembers() {
+            const membersList = document.getElementById('membersList');
+            const searchTerm = document.getElementById('memberSearchInput')?.value.toLowerCase() || '';
+            const roleFilter = document.getElementById('roleFilter')?.value || '';
+            
+            let filteredMembers = members.filter(member => {
+                const matchesSearch = member.name.toLowerCase().includes(searchTerm) || 
+                                    member.phone.includes(searchTerm);
+                const matchesRole = !roleFilter || member.role === roleFilter;
+                return matchesSearch && matchesRole;
+            });
+            
+            membersList.innerHTML = '';
+            
+            filteredMembers.forEach(member => {
+                const memberDiv = document.createElement('div');
+                memberDiv.className = 'member-item';
+                memberDiv.innerHTML = `
+                    <div>
+                        <strong>${member.name}</strong>
+                        <div style="fontmemberDiv.innerHTML = `
+                    <div>
+                        <strong>${member.name}</strong>
+                        <div style="font-size: 14px; color: var(--text-light); margin-top: 5px;">
+                            <i class="fas fa-user-tag"></i> ${getRoleText(member.role)} | 
+                            <i class="fas fa-phone"></i> ${member.phone}
+                            ${member.email ? ` | <i class="fas fa-envelope"></i> ${member.email}` : ''}
+                        </div>
+                        ${member.notes ? `<div style="font-size: 12px; margin-top: 8px; padding: 8px; background: rgba(212, 175, 55, 0.1); border-radius: 8px;">${member.notes}</div>` : ''}
+                        <div style="font-size: 12px; color: var(--text-light); margin-top: 8px;">
+                            <i class="fas fa-calendar"></i> شامل: ${formatDate(member.joinDate)}
+                        </div>
+                    </div>
+                    <button class="delete-btn" onclick="deleteMember(${member.id})">
+                        <i class="fas fa-trash"></i> حذف
+                    </button>
+                `;
+                membersList.appendChild(memberDiv);
+            });
+        }
+
+        function getRoleText(role) {
+            const roleTexts = {
+                ur: {
+                    president: "صدر",
+                    "vice-president": "نائب صدر",
+                    secretary: "سکریٹری",
+                    treasurer: "خزانچی",
+                    member: "ممبر",
+                    volunteer: "رضاکار"
+                },
+                en: {
+                    president: "President",
+                    "vice-president": "Vice President",
+                    secretary: "Secretary",
+                    treasurer: "Treasurer",
+                    member: "Member",
+                    volunteer: "Volunteer"
+                },
+                ar: {
+                    president: "الرئيس",
+                    "vice-president": "نائب الرئيس",
+                    secretary: "السكرتير",
+                    treasurer: "أمين الصندوق",
+                    member: "عضو",
+                    volunteer: "متطوع"
+                }
+            };
+            return roleTexts[currentLanguage]?.[role] || role;
+        }
+
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            return date.toLocaleDateString('ur-PK');
+        }
+
+        function deleteMember(id) {
+            if (confirm('کیا آپ واقعی اس ممبر کو حذف کرنا چاہتے ہیں؟')) {
+                members = members.filter(member => member.id !== id);
+                displayMembers();
+                updateStats();
+                showNotification('ممبر کامیابی سے حذف کر دیا گیا!');
+            }
+        }
+
+        // Search functionality
+        document.getElementById('memberSearchInput')?.addEventListener('input', displayMembers);
+        document.getElementById('roleFilter')?.addEventListener('change', displayMembers);
+
+        // Project Management
+        document.getElementById('projectForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const project = {
+                id: Date.now(),
+                name: document.getElementById('projectName').value,
+                description: document.getElementById('projectDesc').value,
+                progress: parseInt(document.getElementById('projectProgressRange').value),
+                status: document.getElementById('projectStatus').value,
+                category: document.getElementById('projectCategory').value,
+                startDate: document.getElementById('projectStartDate').value,
+                budget: document.getElementById('projectBudget').value || 0
+            };
+            
+            projects.push(project);
+            displayProjects();
+            updateStats();
+            addActivity(`نیا پروجیکٹ شامل: ${project.name}`);
+            
+            this.reset();
+            document.getElementById('progressValue').textContent = '0';
+            showNotification('پروجیکٹ کامیابی سے محفوظ کر دیا گیا!');
+        });
+
+        function updateProgressValue(value) {
+            document.getElementById('progressValue').textContent = value;
+        }
+
+        function displayProjects() {
+            const projectsList = document.getElementById('projectsList');
+            projectsList.innerHTML = '';
+            
+            projects.forEach(project => {
+                const projectDiv = document.createElement('div');
+                projectDiv.className = 'project-item';
+                
+                const statusColors = {
+                    planning: '#6c757d',
+                    active: '#28a745',
+                    paused: '#ffc107',
+                    completed: '#17a2b8',
+                    cancelled: '#dc3545'
+                };
+                
+                projectDiv.innerHTML = `
+                    <div style="flex: 1;">
+                        <strong>${project.name}</strong>
+                        <div style="font-size: 14px; color: var(--text-light); margin: 8px 0;">
+                            ${project.description}
+                        </div>
+                        <div style="display: flex; gap: 15px; align-items: center; margin: 10px 0;">
+                            <span style="background: ${statusColors[project.status]}; color: white; padding: 4px 12px; border-radius: 15px; font-size: 12px;">
+                                ${getStatusText(project.status)}
+                            </span>
+                            <span style="font-size: 12px;">
+                                <i class="fas fa-tag"></i> ${getCategoryText(project.category)}
+                            </span>
+                            ${project.startDate ? `<span style="font-size: 12px;"><i class="fas fa-calendar"></i> ${formatDate(project.startDate)}</span>` : ''}
+                            ${project.budget > 0 ? `<span style="font-size: 12px;"><i class="fas fa-rupee-sign"></i> ${project.budget}</span>` : ''}
+                        </div>
+                        <div style="margin-top: 10px;">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px;">
+                                <span style="font-size: 12px; font-weight: bold;">پیش قدمی:</span>
+                                <span style="font-size: 12px; font-weight: bold;">${project.progress}%</span>
+                            </div>
+                            <div class="progress-bar" style="height: 8px;">
+                                <div class="progress-fill" style="width: ${project.progress}%; height: 100%; font-size: 10px;"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="delete-btn" onclick="deleteProject(${project.id})">
+                        <i class="fas fa-trash"></i> حذف
+                    </button>
+                `;
+                projectsList.appendChild(projectDiv);
+            });
+        }
+
+        function getStatusText(status) {
+            const statusTexts = {
+                ur: {
+                    planning: "منصوبہ بندی",
+                    active: "فعال",
+                    paused: "رک گیا",
+                    completed: "مکمل",
+                    cancelled: "منسوخ"
+                },
+                en: {
+                    planning: "Planning",
+                    active: "Active",
+                    paused: "Paused",
+                    completed: "Completed",
+                    cancelled: "Cancelled"
+                },
+                ar: {
+                    planning: "التخطيط",
+                    active: "نشط",
+                    paused: "متوقف",
+                    completed: "مكتمل",
+                    cancelled: "ملغي"
+                }
+            };
+            return statusTexts[currentLanguage]?.[status] || status;
+        }
+
+        function getCategoryText(category) {
+            const categoryTexts = {
+                ur: {
+                    construction: "تعمیرات",
+                    education: "تعلیم",
+                    community: "کمیونٹی",
+                    religious: "مذہبی",
+                    charity: "خیرات"
+                },
+                en: {
+                    construction: "Construction",
+                    education: "Education",
+                    community: "Community",
+                    religious: "Religious",
+                    charity: "Charity"
+                },
+                ar: {
+                    construction: "البناء",
+                    education: "التعليم",
+                    community: "المجتمع",
+                    religious: "ديني",
+                    charity: "الخيرية"
+                }
+            };
+            return categoryTexts[currentLanguage]?.[category] || category;
+        }
+
+        function deleteProject(id) {
+            if (confirm('کیا آپ واقعی اس پروجیکٹ کو حذف کرنا چاہتے ہیں؟')) {
+                projects = projects.filter(project => project.id !== id);
+                displayProjects();
+                updateStats();
+                showNotification('پروجیکٹ کامیابی سے حذف کر دیا گیا!');
+            }
+        }
+
+        // Photo Gallery
+        document.getElementById('photoForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const fileInput = document.getElementById('photoFile');
+            const caption = document.getElementById('photoCaption').value;
+            
+            if (fileInput.files.length === 0) {
+                showNotification('برائے کرم پہلے تصویر منتخب کریں!', 'error');
+                return;
+            }
+            
+            const file = fileInput.files[0];
+            const reader = new FileReader();
+            
+            reader.onload = function(e) {
+                const photo = {
+                    id: Date.now(),
+                    url: e.target.result,
+                    caption: caption || 'بغیر عنوان',
+                    date: new Date().toISOString()
+                };
+                
+                photos.push(photo);
+                displayPhotos();
+                addActivity(`نئی تصویر شامل: ${photo.caption}`);
+            };
+            
+            reader.readAsDataURL(file);
+            this.reset();
+            showNotification('تصویر کامیابی سے اپلوڈ کر دی گئی!');
+        });
+
+        function displayPhotos() {
+            const photoGallery = document.getElementById('photoGallery');
+            
+            // Clear existing sample photos and add uploaded photos
+            const uploadedPhotosHTML = photos.map(photo => `
+                <div class="gallery-item" style="background: #f8f9fa; border-radius: 15px; padding: 15px; text-align: center; position: relative;">
+                    <img src="${photo.url}" alt="${photo.caption}" style="width: 100%; height: 150px; object-fit: cover; border-radius: 10px; margin-bottom: 10px;">
+                    <div style="font-weight: bold; margin-bottom: 5px;">${photo.caption}</div>
+                    <div style="font-size: 14px; color: var(--text-light);">${formatDate(photo.date.split('T')[0])}</div>
+                    <button onclick="deletePhoto(${photo.id})" style="position: absolute; top: 10px; right: 10px; background: rgba(220, 53, 69, 0.8); color: white; border: none; border-radius: 50%; width: 30px; height: 30px; cursor: pointer;">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            `).join('');
+            
+            // Keep sample photos and add uploaded photos
+            const samplePhotosHTML = `
+                <div class="gallery-item" style="background: #f8f9fa; border-radius: 15px; padding: 15px; text-align: center;">
+                    <div style="width: 100%; height: 150px; background: var(--accent-gold); border-radius: 10px; display: flex; align-items: center; justify-content: center; margin-bottom: 10px;">
+                        <i class="fas fa-mosque" style="font-size: 48px; color: var(--primary-green);"></i>
+                    </div>
+                    <div style="font-weight: bold; margin-bottom: 5px;" data-translate="sampleImage1">تنظیم کا دفتر</div>
+                    <div style="font-size: 14px; color: var(--text-light);" data-translate="sampleDate1">5 اگست 2025</div>
+                </div>
+                <div class="gallery-item" style="background: #f8f9fa; border-radius: 15px; padding: 15px; text-align: center;">
+                    <div style="width: 100%; height: 150px; background: var(--accent-gold); border-radius: 10px; display: flex; align-items: center; justify-content: center; margin-bottom: 10px;">
+                        <i class="fas fa-users" style="font-size: 48px; color: var(--primary-green);"></i>
+                    </div>
+                    <div style="font-weight: bold; margin-bottom: 5px;" data-translate="sampleImage2">ممبرز کا اجلاس</div>
+                    <div style="font-size: 14px; color: var(--text-light);" data-translate="sampleDate2">1 اگست 2025</div>
+                </div>
+                <div class="gallery-item" style="background: #f8f9fa; border-radius: 15px; padding: 15px; text-align: center;">
+                    <div style="width: 100%; height: 150px; background: var(--accent-gold); border-radius: 10px; display: flex; align-items: center; justify-content: center; margin-bottom: 10px;">
+                        <i class="fas fa-hammer" style="font-size: 48px; color: var(--primary-green);"></i>
+                    </div>
+                    <div style="font-weight: bold; margin-bottom: 5px;" data-translate="sampleImage3">تعمیراتی کام</div>
+                    <div style="font-size: 14px; color: var(--text-light);" data-translate="sampleDate3">25 جولائی 2025</div>
+                </div>
+            `;
+            
+            photoGallery.innerHTML = samplePhotosHTML + uploadedPhotosHTML;
+            updateTranslations(); // Re-apply translations to sample photos
+        }
+
+        function deletePhoto(id) {
+            if (confirm('کیا آپ واقعی اس تصویر کو حذف کرنا چاہتے ہیں؟')) {
+                photos = photos.filter(photo => photo.id !== id);
+                displayPhotos();
+                showNotification('تصویر کامیابی سے حذف کر دی گئی!');
+            }
+        }
+
+        // Statistics and Updates
+        function updateStats() {
+            document.getElementById('memberCount').textContent = members.length;
+            document.getElementById('projectCount').textContent = projects.filter(p => p.status === 'active').length;
+            document.getElementById('totalMembersAbout').textContent = `${members.length}+`;
+            
+            // Update main project progress if exists
+            const mainProject = projects.find(p => p.name.includes('قرآنی کتب'));
+            if (mainProject) {
+                document.getElementById('mainProjectProgress').style.width = `${mainProject.progress}%`;
+                document.getElementById('mainProjectProgress').textContent = `${mainProject.progress}%`;
+            }
+            
+            // Update reports section
+            document.getElementById('newMembersCount').textContent = members.filter(m => {
+                const joinDate = new Date(m.joinDate);
+                const thisMonth = new Date();
+                return joinDate.getMonth() === thisMonth.getMonth() && joinDate.getFullYear() === thisMonth.getFullYear();
+            }).length;
+            
+            document.getElementById('activeProjectsCount').textContent = projects.filter(p => p.status === 'active').length;
+            document.getElementById('completedTasksCount').textContent = projects.filter(p => p.status === 'completed').length;
+        }
+
+        function addActivity(description) {
+            const activity = {
+                id: Date.now(),
+                description: description,
+                date: new Date()
+            };
+            
+            activityLog.unshift(activity);
+            
+            // Keep only last 10 activities
+            if (activityLog.length > 10) {
+                activityLog = activityLog.slice(0, 10);
+            }
+            
+            updateActivityLog();
+        }
+
+        function updateActivityLog() {
+            const activityLogDiv = document.getElementById('activityLog');
+            
+            const existingActivities = `
+                <div class="activity-item" style="padding: 10px; border-left: 3px solid var(--accent-gold); margin: 10px 0; background: #f8f9fa; border-radius: 8px;">
+                    <div style="font-weight: bold;" data-translate="activity1">نیا ممبر شامل</div>
+                    <div style="font-size: 14px; color: var(--text-light);">2 گھنٹے پہلے</div>
+                </div>
+                <div class="activity-item" style="padding: 10px; border-left: 3px solid var(--secondary-green); margin: 10px 0; background: #f8f9fa; border-radius: 8px;">
+                    <div style="font-weight: bold;" data-translate="activity2">پروجیکٹ اپڈیٹ</div>
+                    <div style="font-size: 14px; color: var(--text-light);">1 دن پہلے</div>
+                </div>
+                <div class="activity-item" style="padding: 10px; border-left: 3px solid var(--primary-green); margin: 10px 0; background: #f8f9fa; border-radius: 8px;">
+                    <div style="font-weight: bold;" data-translate="activity3">اجلاس منعقد</div>
+                    <div style="font-size: 14px; color: var(--text-light);">3 دن پہلے</div>
+                </div>
+            `;
+            
+            const newActivitiesHTML = activityLog.map(activity => {
+                const timeDiff = new Date() - activity.date;
+                const minutes = Math.floor(timeDiff / (1000 * 60));
+                const hours = Math.floor(timeDiff / (1000 * 60 * 60));
+                const days = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
+                
+                let timeAgo;
+                if (days > 0) {
+                    timeAgo = `${days} دن پہلے`;
+                } else if (hours > 0) {
+                    timeAgo = `${hours} گھنٹے پہلے`;
+                } else {
+                    timeAgo = `${minutes} منٹ پہلے`;
+                }
+                
+                return `
+                    <div class="activity-item" style="padding: 10px; border-left: 3px solid var(--accent-gold); margin: 10px 0; background: #e8f5e8; border-radius: 8px;">
+                        <div style="font-weight: bold;">${activity.description}</div>
+                        <div style="font-size: 14px; color: var(--text-light);">${timeAgo}</div>
+                    </div>
+                `;
+            }).join('');
+            
+            activityLogDiv.innerHTML = newActivitiesHTML + existingActivities;
+        }
+
+        // Export Functions
+        function exportMembers() {
+            const csvContent = "data:text/csv;charset=utf-8," + 
+                "Name,Role,Phone,Email,Notes,Join Date\n" +
+                members.map(member => 
+                    `"${member.name}","${getRoleText(member.role)}","${member.phone}","${member.email}","${member.notes}","${member.joinDate}"`
+                ).join("\n");
+            
+            const encodedUri = encodeURI(csvContent);
+            const link = document.createElement("a");
+            link.setAttribute("href", encodedUri);
+            link.setAttribute("download", "millat_islami_members.csv");
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            
+            showNotification('ممبرز کی فہرست ایکسپورٹ ہو گئی!');
+        }
+
+        function exportProjects() {
+            const csvContent = "data:text/csv;charset=utf-8," + 
+                "Name,Description,Progress,Status,Category,Start Date,Budget\n" +
+                projects.map(project => 
+                    `"${project.name}","${project.description}","${project.progress}%","${getStatusText(project.status)}","${getCategoryText(project.category)}","${project.startDate}","${project.budget}"`
+                ).join("\n");
+            
+            const encodedUri = encodeURI(csvContent);
+            const link = document.createElement("a");
+            link.setAttribute("href", encodedUri);
+            link.setAttribute("download", "millat_islami_projects.csv");
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            
+            showNotification('پروجیکٹس کی تفصیلات ایکسپورٹ ہو گئیں!');
+        }
+
+        function generateReport() {
+            const reportWindow = window.open('', '_blank');
+            const reportHTML = `
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <title>ملؔت اسلامی - مکمل رپورٹ</title>
+                    <style>
+                        body { font-family: 'Noto Nastaliq Urdu', Arial, sans-serif; direction: rtl; margin: 20px; }
+                        h1, h2 { color: #1a5f3f; text-align: center; }
+                        table { width: 100%; border-collapse: collapse; margin: 20px 0; }
+                        th, td { border: 1px solid #ddd; padding: 12px; text-align: right; }
+                        th { background-color: #f2f2f2; }
+                        .stats { display: flex; justify-content: space-around; margin: 20px 0; }
+                        .stat { text-align: center; padding: 20px; border: 2px solid #d4af37; border-radius: 10px; }
+                        @media print { body { margin: 0; } }
+                    </style>
+                </head>
+                <body>
+                    <h1>ملؔت اسلامی</h1>
+                    <h2>تنظیمی رپورٹ</h2>
+                    <p><strong>رپورٹ کی تاریخ:</strong> ${new Date().toLocaleDateString('ur-PK')}</p>
+                    
+                    <div class="stats">
+                        <div class="stat">
+                            <h3>${members.length}</h3>
+                            <p>کل ممبرز</p>
+                        </div>
+                        <div class="stat">
+                            <h3>${projects.length}</h3>
+                            <p>کل پروجیکٹس</p>
+                        </div>
+                        <div class="stat">
+                            <h3>${projects.filter(p => p.status === 'active').length}</h3>
+                            <p>فعال پروجیکٹس</p>
+                        </div>
+                    </div>
+                    
+                    <h2>ممبرز کی فہرست</h2>
+                    <table>
+                        <tr><th>نام</th><th>عہدہ</th><th>فون</th><th>شمولیت</th></tr>
+                        ${members.map(member => 
+                            `<tr><td>${member.name}</td><td>${getRoleText(member.role)}</td><td>${member.phone}</td><td>${formatDate(member.joinDate)}</td></tr>`
+                        ).join('')}
+                    </table>
+                    
+                    <h2>پروجیکٹس کی تفصیلات</h2>
+                    <table>
+                        <tr><th>نام</th><th>وضاحت</th><th>پیش قدمی</th><th>حالت</th></tr>
+                        ${projects.map(project => 
+                            `<tr><td>${project.name}</td><td>${project.description}</td><td>${project.progress}%</td><td>${getStatusText(project.status)}</td></tr>`
+                        ).join('')}
+                    </table>
+                </body>
+                </html>
+            `;
+            
+            reportWindow.document.write(reportHTML);
+            reportWindow.document.close();
+            
+            showNotification('مکمل رپورٹ تیار کر دی گئی!');
+        }
+
+        // Initialize App
+        function initializeApp() {
+            displayMembers();
+            displayProjects();
+            displayPhotos();
+            updateStats();
+            updateTranslations();
+            
+            // Set default date to today for project form
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('projectStartDate').value = today;
+        }
+
+        // Event listeners for form resets and updates
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeApp();
+            
+            // Add smooth scrolling for navigation
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const targetSection = this.getAttribute('onclick').match(/'([^']+)'/)[1];
+                    showSection(targetSection);
+                });
+            });
+        });
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', function(e) {
+            if (e.ctrlKey) {
+                switch(e.key) {
+                    case '1':
+                        e.preventDefault();
+                        showSection('home');
+                        break;
+                    case '2':
+                        e.preventDefault();
+                        showSection('members');
+                        break;
+                    case '3':
+                        e.preventDefault();
+                        showSection('projects');
+                        break;
+                    case 's':
+                        e.preventDefault();
+                        exportMembers();
+                        break;
+                }
+            }
+        });
+
+        // Auto-save functionality (optional)
+        setInterval(function() {
+            try {
+                const data = {
+                    members: members,
+                    projects: projects,
+                    photos: photos,
+                    activityLog: activityLog
+                };
+                // Note: localStorage is not available in Claude artifacts
+                // This would work in a real browser environment
+                // localStorage.setItem('millat_islami_data', JSON.stringify(data));
+            } catch (error) {
+                console.log('Auto-save not available in this environment');
+            }
+        }, 60000); // Auto-save every minute
+    </script>
+</body>
+</html>
