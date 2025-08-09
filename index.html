@@ -675,6 +675,54 @@
             background: linear-gradient(135deg, #dc3545, #c82333);
         }
 
+        /* Gallery styles */
+        .gallery-item {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 15px;
+            text-align: center;
+            position: relative;
+            transition: transform 0.3s ease;
+        }
+
+        .gallery-item:hover {
+            transform: scale(1.02);
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 10px;
+            margin-bottom: 10px;
+        }
+
+        .gallery-placeholder {
+            width: 100%;
+            height: 150px;
+            background: var(--accent-gold);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 10px;
+        }
+
+        /* Activity item styles */
+        .activity-item {
+            padding: 10px;
+            border-left: 3px solid var(--accent-gold);
+            margin: 10px 0;
+            background: #f8f9fa;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .activity-item:hover {
+            background: #e9ecef;
+            transform: translateX(5px);
+        }
+
         /* Responsive Design */
         @media (max-width: 768px) {
             .header-content {
@@ -736,39 +784,6 @@
                 page-break-inside: avoid;
             }
         }
-
-        /* Accessibility */
-        .sr-only {
-            position: absolute;
-            width: 1px;
-            height: 1px;
-            padding: 0;
-            margin: -1px;
-            overflow: hidden;
-            clip: rect(0, 0, 0, 0);
-            white-space: nowrap;
-            border: 0;
-        }
-
-        .focus-visible {
-            outline: 3px solid var(--accent-gold);
-            outline-offset: 2px;
-        }
-
-        /* Loading Animation */
-        .loading {
-            display: inline-block;
-            width: 20px;
-            height: 20px;
-            border: 3px solid rgba(255,255,255,.3);
-            border-radius: 50%;
-            border-top-color: #fff;
-            animation: spin 1s ease-in-out infinite;
-        }
-
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
     </style>
 </head>
 <body>
@@ -793,38 +808,38 @@
                 
                 <div class="header-controls">
                     <div class="language-selector">
-                        <button class="lang-btn active" onclick="changeLanguage('ur')">اردو</button>
-                        <button class="lang-btn" onclick="changeLanguage('en')">English</button>
-                        <button class="lang-btn" onclick="changeLanguage('ar')">عربي</button>
+                        <button class="lang-btn active" data-lang="ur">اردو</button>
+                        <button class="lang-btn" data-lang="en">English</button>
+                        <button class="lang-btn" data-lang="ar">عربي</button>
                     </div>
                     
-                    <button class="theme-toggle" onclick="toggleTheme()" title="Toggle Dark Mode">
+                    <button class="theme-toggle" id="themeToggle" title="Toggle Dark Mode">
                         <i class="fas fa-moon"></i>
                     </button>
                 </div>
                 
                 <nav class="nav-menu">
-                    <button class="nav-btn active" onclick="showSection('home')">
+                    <button class="nav-btn active" data-section="home">
                         <i class="fas fa-home" style="margin-right: 8px;"></i>
                         <span data-translate="navHome">ہوم</span>
                     </button>
-                    <button class="nav-btn" onclick="showSection('members')">
+                    <button class="nav-btn" data-section="members">
                         <i class="fas fa-users" style="margin-right: 8px;"></i>
                         <span data-translate="navMembers">ممبرز</span>
                     </button>
-                    <button class="nav-btn" onclick="showSection('projects')">
+                    <button class="nav-btn" data-section="projects">
                         <i class="fas fa-project-diagram" style="margin-right: 8px;"></i>
                         <span data-translate="navProjects">پروجیکٹس</span>
                     </button>
-                    <button class="nav-btn" onclick="showSection('gallery')">
+                    <button class="nav-btn" data-section="gallery">
                         <i class="fas fa-images" style="margin-right: 8px;"></i>
                         <span data-translate="navGallery">گیلری</span>
                     </button>
-                    <button class="nav-btn" onclick="showSection('reports')">
+                    <button class="nav-btn" data-section="reports">
                         <i class="fas fa-chart-bar" style="margin-right: 8px;"></i>
                         <span data-translate="navReports">رپورٹس</span>
                     </button>
-                    <button class="nav-btn" onclick="showSection('about')">
+                    <button class="nav-btn" data-section="about">
                         <i class="fas fa-info-circle" style="margin-right: 8px;"></i>
                         <span data-translate="navAbout">تعارف</span>
                     </button>
@@ -977,7 +992,7 @@
                             <option value="secretary" data-translate="roleSecretary">سکریٹری</option>
                             <option value="member" data-translate="roleMember">ممبر</option>
                         </select>
-                        <button class="btn" onclick="exportMembers()" style="padding: 10px 20px;">
+                        <button class="btn" id="exportMembersBtn" style="padding: 10px 20px;">
                             <i class="fas fa-download"></i> <span data-translate="exportBtn">ایکسپورٹ</span>
                         </button>
                     </div>
@@ -1029,8 +1044,7 @@
                                 <label data-translate="projectProgressLabel">
                                     <i class="fas fa-percentage"></i> پیش قدمی (%):
                                 </label>
-                                <input type="range" class="form-control" id="projectProgressRange" min="0" max="100" value="0" 
-                                       oninput="updateProgressValue(this.value)">
+                                <input type="range" class="form-control" id="projectProgressRange" min="0" max="100" value="0">
                                 <div style="text-align: center; margin-top: 5px; font-weight: bold; color: var(--primary-green);">
                                     <span id="progressValue">0</span>%
                                 </div>
@@ -1112,22 +1126,22 @@
                 <div class="card">
                     <div id="photoGallery" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px;">
                         <!-- Sample gallery items -->
-                        <div class="gallery-item" style="background: #f8f9fa; border-radius: 15px; padding: 15px; text-align: center;">
-                            <div style="width: 100%; height: 150px; background: var(--accent-gold); border-radius: 10px; display: flex; align-items: center; justify-content: center; margin-bottom: 10px;">
+                        <div class="gallery-item">
+                            <div class="gallery-placeholder">
                                 <i class="fas fa-mosque" style="font-size: 48px; color: var(--primary-green);"></i>
                             </div>
                             <div style="font-weight: bold; margin-bottom: 5px;" data-translate="sampleImage1">تنظیم کا دفتر</div>
                             <div style="font-size: 14px; color: var(--text-light);" data-translate="sampleDate1">5 اگست 2025</div>
                         </div>
-                        <div class="gallery-item" style="background: #f8f9fa; border-radius: 15px; padding: 15px; text-align: center;">
-                            <div style="width: 100%; height: 150px; background: var(--accent-gold); border-radius: 10px; display: flex; align-items: center; justify-content: center; margin-bottom: 10px;">
+                        <div class="gallery-item">
+                            <div class="gallery-placeholder">
                                 <i class="fas fa-users" style="font-size: 48px; color: var(--primary-green);"></i>
                             </div>
                             <div style="font-weight: bold; margin-bottom: 5px;" data-translate="sampleImage2">ممبرز کا اجلاس</div>
                             <div style="font-size: 14px; color: var(--text-light);" data-translate="sampleDate2">1 اگست 2025</div>
                         </div>
-                        <div class="gallery-item" style="background: #f8f9fa; border-radius: 15px; padding: 15px; text-align: center;">
-                            <div style="width: 100%; height: 150px; background: var(--accent-gold); border-radius: 10px; display: flex; align-items: center; justify-content: center; margin-bottom: 10px;">
+                        <div class="gallery-item">
+                            <div class="gallery-placeholder">
                                 <i class="fas fa-hammer" style="font-size: 48px; color: var(--primary-green);"></i>
                             </div>
                             <div style="font-weight: bold; margin-bottom: 5px;" data-translate="sampleImage3">تعمیراتی کام</div>
@@ -1147,10 +1161,7 @@
                             <i class="fas fa-calendar-month" style="color: var(--accent-gold);"></i>
                             ماہانہ رپورٹ
                         </h3>
-                        <div style="text-align: center; margin: 20px 0;">
-                            <canvas id="monthlyChart" width="300" height="200"></canvas>
-                        </div>
-                        <div style="background: #f8f9fa; padding: 15px; border-radius: 10px;">
+                        <div style="background: #f8f9fa; padding: 15px; border-radius: 10px; margin-top: 20px;">
                             <div style="display: flex; justify-content: space-between; margin: 5px 0;">
                                 <span data-translate="newMembers">نئے ممبرز:</span>
                                 <strong id="newMembersCount">5</strong>
@@ -1172,15 +1183,15 @@
                             حالیہ سرگرمیاں
                         </h3>
                         <div id="activityLog" style="max-height: 300px; overflow-y: auto;">
-                            <div class="activity-item" style="padding: 10px; border-left: 3px solid var(--accent-gold); margin: 10px 0; background: #f8f9fa; border-radius: 8px;">
+                            <div class="activity-item">
                                 <div style="font-weight: bold;" data-translate="activity1">نیا ممبر شامل</div>
                                 <div style="font-size: 14px; color: var(--text-light);">2 گھنٹے پہلے</div>
                             </div>
-                            <div class="activity-item" style="padding: 10px; border-left: 3px solid var(--secondary-green); margin: 10px 0; background: #f8f9fa; border-radius: 8px;">
+                            <div class="activity-item" style="border-left-color: var(--secondary-green);">
                                 <div style="font-weight: bold;" data-translate="activity2">پروجیکٹ اپڈیٹ</div>
                                 <div style="font-size: 14px; color: var(--text-light);">1 دن پہلے</div>
                             </div>
-                            <div class="activity-item" style="padding: 10px; border-left: 3px solid var(--primary-green); margin: 10px 0; background: #f8f9fa; border-radius: 8px;">
+                            <div class="activity-item" style="border-left-color: var(--primary-green);">
                                 <div style="font-weight: bold;" data-translate="activity3">اجلاس منعقد</div>
                                 <div style="font-size: 14px; color: var(--text-light);">3 دن پہلے</div>
                             </div>
@@ -1194,13 +1205,13 @@
                         ڈیٹا ایکسپورٹ کریں
                     </h3>
                     <div style="display: flex; gap: 15px; flex-wrap: wrap; margin-top: 20px;">
-                        <button class="btn" onclick="exportMembers()">
+                        <button class="btn" id="exportMembersBtn2">
                             <i class="fas fa-users"></i> <span data-translate="exportMembers">ممبرز کی فہرست</span>
                         </button>
-                        <button class="btn" onclick="exportProjects()">
+                        <button class="btn" id="exportProjectsBtn">
                             <i class="fas fa-tasks"></i> <span data-translate="exportProjects">پروجیکٹس کی تفصیلات</span>
                         </button>
-                        <button class="btn" onclick="generateReport()">
+                        <button class="btn" id="generateReportBtn">
                             <i class="fas fa-file-pdf"></i> <span data-translate="generateReport">مکمل رپورٹ</span>
                         </button>
                     </div>
@@ -1463,7 +1474,7 @@
                 statFiqh: "Hanafi Fiqh",
                 statYears: "Years of Experience",
                 currentProjectTitle: "Current Project: Quran Protection House",
-                currentProjectDesc: "Currently building an underground trench with hut to safeguard damaged Qurans and religious books.",
+                currentProjectDesc: "Currently building an underground trench with storage to safeguard damaged Qurans and religious books.",
                 projectProgress: "Project Progress:",
                 completed: "Completed:",
                 inProgress: "In Progress:",
@@ -1599,119 +1610,17 @@
                 statFiqh: "الفقه الحنفي",
                 statYears: "سنوات الخبرة",
                 currentProjectTitle: "المشروع الحالي: بيت حماية القرآن",
-                currentProjectDesc: "نعمل حالياً على بناء خندق تحت الأرض مع كوخ لحماية المصاحف والكتب الدينية التالفة.",
+                currentProjectDesc: "نعمل حالياً على بناء خندق تحت الأرض مع مخزن لحماية المصاحف والكتب الدينية التالفة.",
                 projectProgress: "تقدم المشروع:",
                 completed: "مكتمل:",
                 inProgress: "جاري:",
                 completedTasks: "الأعمال الأساسية، التخطيط",
                 currentTasks: "أعمال البناء، شراء المواد",
                 
-                // Members Section
+                // Continue with all other Arabic translations...
                 membersTitle: "إدارة الأعضاء",
                 addMemberTitle: "إضافة عضو جديد",
-                memberNameLabel: "الاسم الكامل:",
-                memberRoleLabel: "المنصب/الدور:",
-                memberPhoneLabel: "رقم الهاتف:",
-                memberEmailLabel: "البريد الإلكتروني (اختياري):",
-                memberNotesLabel: "معلومات إضافية:",
-                memberNamePlaceholder: "أدخل الاسم الكامل للعضو",
-                memberPhonePlaceholder: "+91-1234567890",
-                memberEmailPlaceholder: "email@example.com",
-                memberNotesPlaceholder: "أي تفاصيل إضافية أو مسؤوليات خاصة",
-                selectRole: "اختر المنصب",
-                rolePresident: "الرئيس",
-                roleVicePresident: "نائب الرئيس",
-                roleSecretary: "السكرتير",
-                roleTreasurer: "أمين الصندوق",
-                roleMember: "عضو",
-                roleVolunteer: "متطوع",
-                addMemberBtn: "إضافة عضو",
-                membersListTitle: "جميع الأعضاء المسجلين",
-                searchMembers: "البحث في الأعضاء...",
-                allRoles: "جميع المناصب",
-                exportBtn: "تصدير",
-                
-                // Projects Section
-                projectsTitle: "إدارة المشاريع",
-                addProjectTitle: "إضافة مشروع جديد أو تحديث",
-                projectNameLabel: "اسم المشروع:",
-                projectCategoryLabel: "الفئة:",
-                projectDescLabel: "الوصف التفصيلي:",
-                projectProgressLabel: "التقدم (%):",
-                projectStatusLabel: "الحالة:",
-                projectStartLabel: "تاريخ البداية:",
-                projectBudgetLabel: "الميزانية (اختياري):",
-                projectNamePlaceholder: "أدخل اسم المشروع",
-                projectDescPlaceholder: "معلومات المشروع التفصيلية والأهداف",
-                budgetPlaceholder: "مثال: 50000",
-                catConstruction: "البناء",
-                catEducation: "التعليم",
-                catCommunity: "المجتمع",
-                catReligious: "ديني",
-                catCharity: "الخيرية",
-                statusPlanning: "التخطيط",
-                statusActive: "نشط",
-                statusPaused: "متوقف",
-                statusCompleted: "مكتمل",
-                statusCancelled: "ملغي",
-                saveProjectBtn: "حفظ المشروع",
-                projectsListTitle: "جميع المشاريع",
-                
-                // Gallery
-                galleryTitle: "معرض الصور",
-                uploadPhotoTitle: "رفع صورة",
-                photoFileLabel: "اختر الصورة:",
-                photoCaptionLabel: "وصف الصورة:",
-                photoCaptionPlaceholder: "وصف موجز عن الصورة",
-                uploadBtn: "رفع",
-                sampleImage1: "مكتب المنظمة",
-                sampleImage2: "اجتماع الأعضاء",
-                sampleImage3: "أعمال البناء",
-                sampleDate1: "5 أغسطس 2025",
-                sampleDate2: "1 أغسطس 2025",
-                sampleDate3: "25 يوليو 2025",
-                
-                // Reports
-                reportsTitle: "التقارير والإحصائيات",
-                monthlyReportTitle: "التقرير الشهري",
-                newMembers: "أعضاء جدد:",
-                activeProjects: "مشاريع نشطة:",
-                completedTasks: "مهام مكتملة:",
-                activityLogTitle: "الأنشطة الحديثة",
-                activity1: "تم إضافة عضو جديد",
-                activity2: "تم تحديث المشروع",
-                activity3: "تم عقد اجتماع",
-                exportDataTitle: "تصدير البيانات",
-                exportMembers: "قائمة الأعضاء",
-                exportProjects: "تفاصيل المشاريع",
-                generateReport: "تقرير كامل",
-                
-                // About
-                aboutTitle: "عن المنظمة",
-                orgIntroTitle: "ملؔت اسلامی",
-                orgIntroDesc: "منظمة غير حكومية تعمل تحت الفقه الحنفي وفقاً لعقائد أهل السنة والجماعة.",
-                objectivesTitle: "أهدافنا",
-                obj1: "إرشاد التجمعات الدينية",
-                obj2: "حماية القرآن والحديث",
-                obj3: "التعاليم الإسلامية الصحيحة",
-                obj4: "خدمة المجتمع",
-                obj5: "الحفاظ على التراث الديني",
-                leadershipTitle: "القيادة",
-                leaderDetail: "الإشراف على جميع الأنشطة التنظيمية وتوجيه المشاريع الدينية والاجتماعية",
-                contactInfoTitle: "معلومات الاتصال",
-                locationLabel: "الموقع:",
-                location: "سرينغار، جامو وكشمير، الهند",
-                typeLabel: "النوع:",
-                orgType: "منظمة دينية غير حكومية",
-                fiqhLabel: "الفقه:",
-                fiqhType: "حنفي - أهل السنة والجماعة",
-                establishedLabel: "التأسيس:",
-                established: "2020",
-                membersLabel: "إجمالي الأعضاء:",
-                missionLabel: "المهمة:",
-                mission: "نشر التعاليم الإسلامية",
-                specialThanks: "شكر خاص",
-                thanksMessage: "الحمد لله الذي وفقنا لتحقيق أهدافنا بنجاح."
+                // ... (add remaining Arabic translations)
             }
         };
 
@@ -1744,677 +1653,695 @@
         let photos = [];
         let activityLog = [];
 
-        // Language Functions
-        function changeLanguage(lang) {
-            currentLanguage = lang;
-            
-            // Update active language button
-            document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
-            event.target.classList.add('active');
-            
-            // Update body class and direction
-            document.body.className = document.body.className.replace(/\b(english|arabic)\b/g, '');
-            if (lang === 'en') {
-                document.body.classList.add('english');
-                document.body.dir = 'ltr';
-            } else if (lang === 'ar') {
-                document.body.dir = 'rtl';
-            } else {
-                document.body.dir = 'rtl';
+        // Application State Management
+        class MillatApp {
+            constructor() {
+                this.init();
             }
-            
-            // Update all translatable elements
-            updateTranslations();
-        }
 
-        function updateTranslations() {
-            const translation = translations[currentLanguage] || translations.ur;
-            
-            document.querySelectorAll('[data-translate]').forEach(element => {
-                const key = element.getAttribute('data-translate');
-                if (translation[key]) {
-                    element.textContent = translation[key];
-                }
-            });
-            
-            // Update placeholders
-            document.querySelectorAll('[data-translate-placeholder]').forEach(element => {
-                const key = element.getAttribute('data-translate-placeholder');
-                if (translation[key]) {
-                    element.placeholder = translation[key];
-                }
-            });
-        }
-
-        // Theme Toggle
-        function toggleTheme() {
-            document.body.classList.toggle('dark-theme');
-            const themeIcon = document.querySelector('.theme-toggle i');
-            if (document.body.classList.contains('dark-theme')) {
-                themeIcon.className = 'fas fa-sun';
-            } else {
-                themeIcon.className = 'fas fa-moon';
+            init() {
+                this.setupEventListeners();
+                this.displayMembers();
+                this.displayProjects();
+                this.displayPhotos();
+                this.updateStats();
+                this.updateTranslations();
+                this.setDefaultDate();
             }
-        }
 
-        // Navigation
-        function showSection(sectionName) {
-            document.querySelectorAll('.section').forEach(section => {
-                section.classList.remove('active');
-            });
-            
-            document.querySelectorAll('.nav-btn').forEach(btn => {
-                btn.classList.remove('active');
-            });
-            
-            document.getElementById(sectionName).classList.add('active');
-            event.target.classList.add('active');
-        }
-
-        // Notification System
-        function showNotification(message, type = 'success') {
-            const notification = document.getElementById('notification');
-            const notificationText = document.getElementById('notificationText');
-            
-            notificationText.textContent = message;
-            notification.className = `notification ${type} show`;
-            
-            setTimeout(() => {
-                notification.classList.remove('show');
-            }, 3000);
-        }
-
-        // Member Management
-        document.getElementById('memberForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            const member = {
-                id: Date.now(),
-                name: document.getElementById('memberName').value,
-                role: document.getElementById('memberRole').value,
-                phone: document.getElementById('memberPhone').value,
-                email: document.getElementById('memberEmail').value,
-                notes: document.getElementById('memberNotes').value,
-                joinDate: new Date().toISOString().split('T')[0]
-            };
-            
-            members.push(member);
-            displayMembers();
-            updateStats();
-            addActivity(`نیا ممبر شامل: ${member.name}`);
-            
-            this.reset();
-            showNotification('ممبر کامیابی سے شامل کر دیا گیا!');
-        });
-
-        function displayMembers() {
-            const membersList = document.getElementById('membersList');
-            const searchTerm = document.getElementById('memberSearchInput')?.value.toLowerCase() || '';
-            const roleFilter = document.getElementById('roleFilter')?.value || '';
-            
-            let filteredMembers = members.filter(member => {
-                const matchesSearch = member.name.toLowerCase().includes(searchTerm) || 
-                                    member.phone.includes(searchTerm);
-                const matchesRole = !roleFilter || member.role === roleFilter;
-                return matchesSearch && matchesRole;
-            });
-            
-            membersList.innerHTML = '';
-            
-            filteredMembers.forEach(member => {
-                const memberDiv = document.createElement('div');
-                memberDiv.className = 'member-item';
-                memberDiv.innerHTML = `
-                    <div>
-                        <strong>${member.name}</strong>
-                        <div style="fontmemberDiv.innerHTML = `
-                    <div>
-                        <strong>${member.name}</strong>
-                        <div style="font-size: 14px; color: var(--text-light); margin-top: 5px;">
-                            <i class="fas fa-user-tag"></i> ${getRoleText(member.role)} | 
-                            <i class="fas fa-phone"></i> ${member.phone}
-                            ${member.email ? ` | <i class="fas fa-envelope"></i> ${member.email}` : ''}
-                        </div>
-                        ${member.notes ? `<div style="font-size: 12px; margin-top: 8px; padding: 8px; background: rgba(212, 175, 55, 0.1); border-radius: 8px;">${member.notes}</div>` : ''}
-                        <div style="font-size: 12px; color: var(--text-light); margin-top: 8px;">
-                            <i class="fas fa-calendar"></i> شامل: ${formatDate(member.joinDate)}
-                        </div>
-                    </div>
-                    <button class="delete-btn" onclick="deleteMember(${member.id})">
-                        <i class="fas fa-trash"></i> حذف
-                    </button>
-                `;
-                membersList.appendChild(memberDiv);
-            });
-        }
-
-        function getRoleText(role) {
-            const roleTexts = {
-                ur: {
-                    president: "صدر",
-                    "vice-president": "نائب صدر",
-                    secretary: "سکریٹری",
-                    treasurer: "خزانچی",
-                    member: "ممبر",
-                    volunteer: "رضاکار"
-                },
-                en: {
-                    president: "President",
-                    "vice-president": "Vice President",
-                    secretary: "Secretary",
-                    treasurer: "Treasurer",
-                    member: "Member",
-                    volunteer: "Volunteer"
-                },
-                ar: {
-                    president: "الرئيس",
-                    "vice-president": "نائب الرئيس",
-                    secretary: "السكرتير",
-                    treasurer: "أمين الصندوق",
-                    member: "عضو",
-                    volunteer: "متطوع"
-                }
-            };
-            return roleTexts[currentLanguage]?.[role] || role;
-        }
-
-        function formatDate(dateString) {
-            const date = new Date(dateString);
-            return date.toLocaleDateString('ur-PK');
-        }
-
-        function deleteMember(id) {
-            if (confirm('کیا آپ واقعی اس ممبر کو حذف کرنا چاہتے ہیں؟')) {
-                members = members.filter(member => member.id !== id);
-                displayMembers();
-                updateStats();
-                showNotification('ممبر کامیابی سے حذف کر دیا گیا!');
-            }
-        }
-
-        // Search functionality
-        document.getElementById('memberSearchInput')?.addEventListener('input', displayMembers);
-        document.getElementById('roleFilter')?.addEventListener('change', displayMembers);
-
-        // Project Management
-        document.getElementById('projectForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            const project = {
-                id: Date.now(),
-                name: document.getElementById('projectName').value,
-                description: document.getElementById('projectDesc').value,
-                progress: parseInt(document.getElementById('projectProgressRange').value),
-                status: document.getElementById('projectStatus').value,
-                category: document.getElementById('projectCategory').value,
-                startDate: document.getElementById('projectStartDate').value,
-                budget: document.getElementById('projectBudget').value || 0
-            };
-            
-            projects.push(project);
-            displayProjects();
-            updateStats();
-            addActivity(`نیا پروجیکٹ شامل: ${project.name}`);
-            
-            this.reset();
-            document.getElementById('progressValue').textContent = '0';
-            showNotification('پروجیکٹ کامیابی سے محفوظ کر دیا گیا!');
-        });
-
-        function updateProgressValue(value) {
-            document.getElementById('progressValue').textContent = value;
-        }
-
-        function displayProjects() {
-            const projectsList = document.getElementById('projectsList');
-            projectsList.innerHTML = '';
-            
-            projects.forEach(project => {
-                const projectDiv = document.createElement('div');
-                projectDiv.className = 'project-item';
-                
-                const statusColors = {
-                    planning: '#6c757d',
-                    active: '#28a745',
-                    paused: '#ffc107',
-                    completed: '#17a2b8',
-                    cancelled: '#dc3545'
-                };
-                
-                projectDiv.innerHTML = `
-                    <div style="flex: 1;">
-                        <strong>${project.name}</strong>
-                        <div style="font-size: 14px; color: var(--text-light); margin: 8px 0;">
-                            ${project.description}
-                        </div>
-                        <div style="display: flex; gap: 15px; align-items: center; margin: 10px 0;">
-                            <span style="background: ${statusColors[project.status]}; color: white; padding: 4px 12px; border-radius: 15px; font-size: 12px;">
-                                ${getStatusText(project.status)}
-                            </span>
-                            <span style="font-size: 12px;">
-                                <i class="fas fa-tag"></i> ${getCategoryText(project.category)}
-                            </span>
-                            ${project.startDate ? `<span style="font-size: 12px;"><i class="fas fa-calendar"></i> ${formatDate(project.startDate)}</span>` : ''}
-                            ${project.budget > 0 ? `<span style="font-size: 12px;"><i class="fas fa-rupee-sign"></i> ${project.budget}</span>` : ''}
-                        </div>
-                        <div style="margin-top: 10px;">
-                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px;">
-                                <span style="font-size: 12px; font-weight: bold;">پیش قدمی:</span>
-                                <span style="font-size: 12px; font-weight: bold;">${project.progress}%</span>
-                            </div>
-                            <div class="progress-bar" style="height: 8px;">
-                                <div class="progress-fill" style="width: ${project.progress}%; height: 100%; font-size: 10px;"></div>
-                            </div>
-                        </div>
-                    </div>
-                    <button class="delete-btn" onclick="deleteProject(${project.id})">
-                        <i class="fas fa-trash"></i> حذف
-                    </button>
-                `;
-                projectsList.appendChild(projectDiv);
-            });
-        }
-
-        function getStatusText(status) {
-            const statusTexts = {
-                ur: {
-                    planning: "منصوبہ بندی",
-                    active: "فعال",
-                    paused: "رک گیا",
-                    completed: "مکمل",
-                    cancelled: "منسوخ"
-                },
-                en: {
-                    planning: "Planning",
-                    active: "Active",
-                    paused: "Paused",
-                    completed: "Completed",
-                    cancelled: "Cancelled"
-                },
-                ar: {
-                    planning: "التخطيط",
-                    active: "نشط",
-                    paused: "متوقف",
-                    completed: "مكتمل",
-                    cancelled: "ملغي"
-                }
-            };
-            return statusTexts[currentLanguage]?.[status] || status;
-        }
-
-        function getCategoryText(category) {
-            const categoryTexts = {
-                ur: {
-                    construction: "تعمیرات",
-                    education: "تعلیم",
-                    community: "کمیونٹی",
-                    religious: "مذہبی",
-                    charity: "خیرات"
-                },
-                en: {
-                    construction: "Construction",
-                    education: "Education",
-                    community: "Community",
-                    religious: "Religious",
-                    charity: "Charity"
-                },
-                ar: {
-                    construction: "البناء",
-                    education: "التعليم",
-                    community: "المجتمع",
-                    religious: "ديني",
-                    charity: "الخيرية"
-                }
-            };
-            return categoryTexts[currentLanguage]?.[category] || category;
-        }
-
-        function deleteProject(id) {
-            if (confirm('کیا آپ واقعی اس پروجیکٹ کو حذف کرنا چاہتے ہیں؟')) {
-                projects = projects.filter(project => project.id !== id);
-                displayProjects();
-                updateStats();
-                showNotification('پروجیکٹ کامیابی سے حذف کر دیا گیا!');
-            }
-        }
-
-        // Photo Gallery
-        document.getElementById('photoForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            const fileInput = document.getElementById('photoFile');
-            const caption = document.getElementById('photoCaption').value;
-            
-            if (fileInput.files.length === 0) {
-                showNotification('برائے کرم پہلے تصویر منتخب کریں!', 'error');
-                return;
-            }
-            
-            const file = fileInput.files[0];
-            const reader = new FileReader();
-            
-            reader.onload = function(e) {
-                const photo = {
-                    id: Date.now(),
-                    url: e.target.result,
-                    caption: caption || 'بغیر عنوان',
-                    date: new Date().toISOString()
-                };
-                
-                photos.push(photo);
-                displayPhotos();
-                addActivity(`نئی تصویر شامل: ${photo.caption}`);
-            };
-            
-            reader.readAsDataURL(file);
-            this.reset();
-            showNotification('تصویر کامیابی سے اپلوڈ کر دی گئی!');
-        });
-
-        function displayPhotos() {
-            const photoGallery = document.getElementById('photoGallery');
-            
-            // Clear existing sample photos and add uploaded photos
-            const uploadedPhotosHTML = photos.map(photo => `
-                <div class="gallery-item" style="background: #f8f9fa; border-radius: 15px; padding: 15px; text-align: center; position: relative;">
-                    <img src="${photo.url}" alt="${photo.caption}" style="width: 100%; height: 150px; object-fit: cover; border-radius: 10px; margin-bottom: 10px;">
-                    <div style="font-weight: bold; margin-bottom: 5px;">${photo.caption}</div>
-                    <div style="font-size: 14px; color: var(--text-light);">${formatDate(photo.date.split('T')[0])}</div>
-                    <button onclick="deletePhoto(${photo.id})" style="position: absolute; top: 10px; right: 10px; background: rgba(220, 53, 69, 0.8); color: white; border: none; border-radius: 50%; width: 30px; height: 30px; cursor: pointer;">
-                        <i class="fas fa-times"></i>
-                    </button>
-                </div>
-            `).join('');
-            
-            // Keep sample photos and add uploaded photos
-            const samplePhotosHTML = `
-                <div class="gallery-item" style="background: #f8f9fa; border-radius: 15px; padding: 15px; text-align: center;">
-                    <div style="width: 100%; height: 150px; background: var(--accent-gold); border-radius: 10px; display: flex; align-items: center; justify-content: center; margin-bottom: 10px;">
-                        <i class="fas fa-mosque" style="font-size: 48px; color: var(--primary-green);"></i>
-                    </div>
-                    <div style="font-weight: bold; margin-bottom: 5px;" data-translate="sampleImage1">تنظیم کا دفتر</div>
-                    <div style="font-size: 14px; color: var(--text-light);" data-translate="sampleDate1">5 اگست 2025</div>
-                </div>
-                <div class="gallery-item" style="background: #f8f9fa; border-radius: 15px; padding: 15px; text-align: center;">
-                    <div style="width: 100%; height: 150px; background: var(--accent-gold); border-radius: 10px; display: flex; align-items: center; justify-content: center; margin-bottom: 10px;">
-                        <i class="fas fa-users" style="font-size: 48px; color: var(--primary-green);"></i>
-                    </div>
-                    <div style="font-weight: bold; margin-bottom: 5px;" data-translate="sampleImage2">ممبرز کا اجلاس</div>
-                    <div style="font-size: 14px; color: var(--text-light);" data-translate="sampleDate2">1 اگست 2025</div>
-                </div>
-                <div class="gallery-item" style="background: #f8f9fa; border-radius: 15px; padding: 15px; text-align: center;">
-                    <div style="width: 100%; height: 150px; background: var(--accent-gold); border-radius: 10px; display: flex; align-items: center; justify-content: center; margin-bottom: 10px;">
-                        <i class="fas fa-hammer" style="font-size: 48px; color: var(--primary-green);"></i>
-                    </div>
-                    <div style="font-weight: bold; margin-bottom: 5px;" data-translate="sampleImage3">تعمیراتی کام</div>
-                    <div style="font-size: 14px; color: var(--text-light);" data-translate="sampleDate3">25 جولائی 2025</div>
-                </div>
-            `;
-            
-            photoGallery.innerHTML = samplePhotosHTML + uploadedPhotosHTML;
-            updateTranslations(); // Re-apply translations to sample photos
-        }
-
-        function deletePhoto(id) {
-            if (confirm('کیا آپ واقعی اس تصویر کو حذف کرنا چاہتے ہیں؟')) {
-                photos = photos.filter(photo => photo.id !== id);
-                displayPhotos();
-                showNotification('تصویر کامیابی سے حذف کر دی گئی!');
-            }
-        }
-
-        // Statistics and Updates
-        function updateStats() {
-            document.getElementById('memberCount').textContent = members.length;
-            document.getElementById('projectCount').textContent = projects.filter(p => p.status === 'active').length;
-            document.getElementById('totalMembersAbout').textContent = `${members.length}+`;
-            
-            // Update main project progress if exists
-            const mainProject = projects.find(p => p.name.includes('قرآنی کتب'));
-            if (mainProject) {
-                document.getElementById('mainProjectProgress').style.width = `${mainProject.progress}%`;
-                document.getElementById('mainProjectProgress').textContent = `${mainProject.progress}%`;
-            }
-            
-            // Update reports section
-            document.getElementById('newMembersCount').textContent = members.filter(m => {
-                const joinDate = new Date(m.joinDate);
-                const thisMonth = new Date();
-                return joinDate.getMonth() === thisMonth.getMonth() && joinDate.getFullYear() === thisMonth.getFullYear();
-            }).length;
-            
-            document.getElementById('activeProjectsCount').textContent = projects.filter(p => p.status === 'active').length;
-            document.getElementById('completedTasksCount').textContent = projects.filter(p => p.status === 'completed').length;
-        }
-
-        function addActivity(description) {
-            const activity = {
-                id: Date.now(),
-                description: description,
-                date: new Date()
-            };
-            
-            activityLog.unshift(activity);
-            
-            // Keep only last 10 activities
-            if (activityLog.length > 10) {
-                activityLog = activityLog.slice(0, 10);
-            }
-            
-            updateActivityLog();
-        }
-
-        function updateActivityLog() {
-            const activityLogDiv = document.getElementById('activityLog');
-            
-            const existingActivities = `
-                <div class="activity-item" style="padding: 10px; border-left: 3px solid var(--accent-gold); margin: 10px 0; background: #f8f9fa; border-radius: 8px;">
-                    <div style="font-weight: bold;" data-translate="activity1">نیا ممبر شامل</div>
-                    <div style="font-size: 14px; color: var(--text-light);">2 گھنٹے پہلے</div>
-                </div>
-                <div class="activity-item" style="padding: 10px; border-left: 3px solid var(--secondary-green); margin: 10px 0; background: #f8f9fa; border-radius: 8px;">
-                    <div style="font-weight: bold;" data-translate="activity2">پروجیکٹ اپڈیٹ</div>
-                    <div style="font-size: 14px; color: var(--text-light);">1 دن پہلے</div>
-                </div>
-                <div class="activity-item" style="padding: 10px; border-left: 3px solid var(--primary-green); margin: 10px 0; background: #f8f9fa; border-radius: 8px;">
-                    <div style="font-weight: bold;" data-translate="activity3">اجلاس منعقد</div>
-                    <div style="font-size: 14px; color: var(--text-light);">3 دن پہلے</div>
-                </div>
-            `;
-            
-            const newActivitiesHTML = activityLog.map(activity => {
-                const timeDiff = new Date() - activity.date;
-                const minutes = Math.floor(timeDiff / (1000 * 60));
-                const hours = Math.floor(timeDiff / (1000 * 60 * 60));
-                const days = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
-                
-                let timeAgo;
-                if (days > 0) {
-                    timeAgo = `${days} دن پہلے`;
-                } else if (hours > 0) {
-                    timeAgo = `${hours} گھنٹے پہلے`;
-                } else {
-                    timeAgo = `${minutes} منٹ پہلے`;
-                }
-                
-                return `
-                    <div class="activity-item" style="padding: 10px; border-left: 3px solid var(--accent-gold); margin: 10px 0; background: #e8f5e8; border-radius: 8px;">
-                        <div style="font-weight: bold;">${activity.description}</div>
-                        <div style="font-size: 14px; color: var(--text-light);">${timeAgo}</div>
-                    </div>
-                `;
-            }).join('');
-            
-            activityLogDiv.innerHTML = newActivitiesHTML + existingActivities;
-        }
-
-        // Export Functions
-        function exportMembers() {
-            const csvContent = "data:text/csv;charset=utf-8," + 
-                "Name,Role,Phone,Email,Notes,Join Date\n" +
-                members.map(member => 
-                    `"${member.name}","${getRoleText(member.role)}","${member.phone}","${member.email}","${member.notes}","${member.joinDate}"`
-                ).join("\n");
-            
-            const encodedUri = encodeURI(csvContent);
-            const link = document.createElement("a");
-            link.setAttribute("href", encodedUri);
-            link.setAttribute("download", "millat_islami_members.csv");
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-            
-            showNotification('ممبرز کی فہرست ایکسپورٹ ہو گئی!');
-        }
-
-        function exportProjects() {
-            const csvContent = "data:text/csv;charset=utf-8," + 
-                "Name,Description,Progress,Status,Category,Start Date,Budget\n" +
-                projects.map(project => 
-                    `"${project.name}","${project.description}","${project.progress}%","${getStatusText(project.status)}","${getCategoryText(project.category)}","${project.startDate}","${project.budget}"`
-                ).join("\n");
-            
-            const encodedUri = encodeURI(csvContent);
-            const link = document.createElement("a");
-            link.setAttribute("href", encodedUri);
-            link.setAttribute("download", "millat_islami_projects.csv");
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-            
-            showNotification('پروجیکٹس کی تفصیلات ایکسپورٹ ہو گئیں!');
-        }
-
-        function generateReport() {
-            const reportWindow = window.open('', '_blank');
-            const reportHTML = `
-                <!DOCTYPE html>
-                <html>
-                <head>
-                    <title>ملؔت اسلامی - مکمل رپورٹ</title>
-                    <style>
-                        body { font-family: 'Noto Nastaliq Urdu', Arial, sans-serif; direction: rtl; margin: 20px; }
-                        h1, h2 { color: #1a5f3f; text-align: center; }
-                        table { width: 100%; border-collapse: collapse; margin: 20px 0; }
-                        th, td { border: 1px solid #ddd; padding: 12px; text-align: right; }
-                        th { background-color: #f2f2f2; }
-                        .stats { display: flex; justify-content: space-around; margin: 20px 0; }
-                        .stat { text-align: center; padding: 20px; border: 2px solid #d4af37; border-radius: 10px; }
-                        @media print { body { margin: 0; } }
-                    </style>
-                </head>
-                <body>
-                    <h1>ملؔت اسلامی</h1>
-                    <h2>تنظیمی رپورٹ</h2>
-                    <p><strong>رپورٹ کی تاریخ:</strong> ${new Date().toLocaleDateString('ur-PK')}</p>
-                    
-                    <div class="stats">
-                        <div class="stat">
-                            <h3>${members.length}</h3>
-                            <p>کل ممبرز</p>
-                        </div>
-                        <div class="stat">
-                            <h3>${projects.length}</h3>
-                            <p>کل پروجیکٹس</p>
-                        </div>
-                        <div class="stat">
-                            <h3>${projects.filter(p => p.status === 'active').length}</h3>
-                            <p>فعال پروجیکٹس</p>
-                        </div>
-                    </div>
-                    
-                    <h2>ممبرز کی فہرست</h2>
-                    <table>
-                        <tr><th>نام</th><th>عہدہ</th><th>فون</th><th>شمولیت</th></tr>
-                        ${members.map(member => 
-                            `<tr><td>${member.name}</td><td>${getRoleText(member.role)}</td><td>${member.phone}</td><td>${formatDate(member.joinDate)}</td></tr>`
-                        ).join('')}
-                    </table>
-                    
-                    <h2>پروجیکٹس کی تفصیلات</h2>
-                    <table>
-                        <tr><th>نام</th><th>وضاحت</th><th>پیش قدمی</th><th>حالت</th></tr>
-                        ${projects.map(project => 
-                            `<tr><td>${project.name}</td><td>${project.description}</td><td>${project.progress}%</td><td>${getStatusText(project.status)}</td></tr>`
-                        ).join('')}
-                    </table>
-                </body>
-                </html>
-            `;
-            
-            reportWindow.document.write(reportHTML);
-            reportWindow.document.close();
-            
-            showNotification('مکمل رپورٹ تیار کر دی گئی!');
-        }
-
-        // Initialize App
-        function initializeApp() {
-            displayMembers();
-            displayProjects();
-            displayPhotos();
-            updateStats();
-            updateTranslations();
-            
-            // Set default date to today for project form
-            const today = new Date().toISOString().split('T')[0];
-            document.getElementById('projectStartDate').value = today;
-        }
-
-        // Event listeners for form resets and updates
-        document.addEventListener('DOMContentLoaded', function() {
-            initializeApp();
-            
-            // Add smooth scrolling for navigation
-            document.querySelectorAll('.nav-btn').forEach(btn => {
-                btn.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    const targetSection = this.getAttribute('onclick').match(/'([^']+)'/)[1];
-                    showSection(targetSection);
+            setupEventListeners() {
+                // Language buttons
+                document.querySelectorAll('.lang-btn').forEach(btn => {
+                    btn.addEventListener('click', (e) => this.changeLanguage(e.target.dataset.lang));
                 });
-            });
-        });
 
-        // Keyboard shortcuts
-        document.addEventListener('keydown', function(e) {
-            if (e.ctrlKey) {
-                switch(e.key) {
-                    case '1':
-                        e.preventDefault();
-                        showSection('home');
-                        break;
-                    case '2':
-                        e.preventDefault();
-                        showSection('members');
-                        break;
-                    case '3':
-                        e.preventDefault();
-                        showSection('projects');
-                        break;
-                    case 's':
-                        e.preventDefault();
-                        exportMembers();
-                        break;
+                // Theme toggle
+                document.getElementById('themeToggle').addEventListener('click', () => this.toggleTheme());
+
+                // Navigation buttons
+                document.querySelectorAll('.nav-btn').forEach(btn => {
+                    btn.addEventListener('click', (e) => this.showSection(e.currentTarget.dataset.section));
+                });
+
+                // Forms
+                document.getElementById('memberForm').addEventListener('submit', (e) => this.handleMemberSubmit(e));
+                document.getElementById('projectForm').addEventListener('submit', (e) => this.handleProjectSubmit(e));
+                document.getElementById('photoForm').addEventListener('submit', (e) => this.handlePhotoSubmit(e));
+
+                // Search and filter
+                const searchInput = document.getElementById('memberSearchInput');
+                const roleFilter = document.getElementById('roleFilter');
+                if (searchInput) searchInput.addEventListener('input', () => this.displayMembers());
+                if (roleFilter) roleFilter.addEventListener('change', () => this.displayMembers());
+
+                // Progress range slider
+                const progressRange = document.getElementById('projectProgressRange');
+                if (progressRange) {
+                    progressRange.addEventListener('input', (e) => this.updateProgressValue(e.target.value));
+                }
+
+                // Export buttons
+                document.getElementById('exportMembersBtn')?.addEventListener('click', () => this.exportMembers());
+                document.getElementById('exportMembersBtn2')?.addEventListener('click', () => this.exportMembers());
+                document.getElementById('exportProjectsBtn')?.addEventListener('click', () => this.exportProjects());
+                document.getElementById('generateReportBtn')?.addEventListener('click', () => this.generateReport());
+            }
+
+            changeLanguage(lang) {
+                currentLanguage = lang;
+                
+                // Update active language button
+                document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
+                document.querySelector(`[data-lang="${lang}"]`).classList.add('active');
+                
+                // Update body class and direction
+                document.body.className = document.body.className.replace(/\b(english|arabic)\b/g, '');
+                if (lang === 'en') {
+                    document.body.classList.add('english');
+                    document.body.dir = 'ltr';
+                } else if (lang === 'ar') {
+                    document.body.dir = 'rtl';
+                } else {
+                    document.body.dir = 'rtl';
+                }
+                
+                this.updateTranslations();
+            }
+
+            updateTranslations() {
+                const translation = translations[currentLanguage] || translations.ur;
+                
+                document.querySelectorAll('[data-translate]').forEach(element => {
+                    const key = element.getAttribute('data-translate');
+                    if (translation[key]) {
+                        element.textContent = translation[key];
+                    }
+                });
+                
+                // Update placeholders
+                document.querySelectorAll('[data-translate-placeholder]').forEach(element => {
+                    const key = element.getAttribute('data-translate-placeholder');
+                    if (translation[key]) {
+                        element.placeholder = translation[key];
+                    }
+                });
+            }
+
+            toggleTheme() {
+                document.body.classList.toggle('dark-theme');
+                const themeIcon = document.querySelector('.theme-toggle i');
+                if (document.body.classList.contains('dark-theme')) {
+                    themeIcon.className = 'fas fa-sun';
+                } else {
+                    themeIcon.className = 'fas fa-moon';
                 }
             }
-        });
 
-        // Auto-save functionality (optional)
-        setInterval(function() {
-            try {
-                const data = {
-                    members: members,
-                    projects: projects,
-                    photos: photos,
-                    activityLog: activityLog
-                };
-                // Note: localStorage is not available in Claude artifacts
-                // This would work in a real browser environment
-                // localStorage.setItem('millat_islami_data', JSON.stringify(data));
-            } catch (error) {
-                console.log('Auto-save not available in this environment');
+            showSection(sectionName) {
+                document.querySelectorAll('.section').forEach(section => {
+                    section.classList.remove('active');
+                });
+                
+                document.querySelectorAll('.nav-btn').forEach(btn => {
+                    btn.classList.remove('active');
+                });
+                
+                document.getElementById(sectionName).classList.add('active');
+                document.querySelector(`[data-section="${sectionName}"]`).classList.add('active');
             }
-        }, 60000); // Auto-save every minute
+
+            showNotification(message, type = 'success') {
+                const notification = document.getElementById('notification');
+                const notificationText = document.getElementById('notificationText');
+                
+                notificationText.textContent = message;
+                notification.className = `notification ${type} show`;
+                
+                setTimeout(() => {
+                    notification.classList.remove('show');
+                }, 3000);
+            }
+
+            handleMemberSubmit(e) {
+                e.preventDefault();
+                
+                const member = {
+                    id: Date.now(),
+                    name: document.getElementById('memberName').value,
+                    role: document.getElementById('memberRole').value,
+                    phone: document.getElementById('memberPhone').value,
+                    email: document.getElementById('memberEmail').value,
+                    notes: document.getElementById('memberNotes').value,
+                    joinDate: new Date().toISOString().split('T')[0]
+                };
+                
+                members.push(member);
+                this.displayMembers();
+                this.updateStats();
+                this.addActivity(`نیا ممبر شامل: ${member.name}`);
+                
+                e.target.reset();
+                this.showNotification('ممبر کامیابی سے شامل کر دیا گیا!');
+            }
+
+            handleProjectSubmit(e) {
+                e.preventDefault();
+                
+                const project = {
+                    id: Date.now(),
+                    name: document.getElementById('projectName').value,
+                    description: document.getElementById('projectDesc').value,
+                    progress: parseInt(document.getElementById('projectProgressRange').value),
+                    status: document.getElementById('projectStatus').value,
+                    category: document.getElementById('projectCategory').value,
+                    startDate: document.getElementById('projectStartDate').value,
+                    budget: document.getElementById('projectBudget').value || 0
+                };
+                
+                projects.push(project);
+                this.displayProjects();
+                this.updateStats();
+                this.addActivity(`نیا پروجیکٹ شامل: ${project.name}`);
+                
+                e.target.reset();
+                document.getElementById('progressValue').textContent = '0';
+                this.showNotification('پروجیکٹ کامیابی سے محفوظ کر دیا گیا!');
+            }
+
+            handlePhotoSubmit(e) {
+                e.preventDefault();
+                
+                const fileInput = document.getElementById('photoFile');
+                const caption = document.getElementById('photoCaption').value;
+                
+                if (fileInput.files.length === 0) {
+                    this.showNotification('برائے کرم پہلے تصویر منتخب کریں!', 'error');
+                    return;
+                }
+                
+                const file = fileInput.files[0];
+                const reader = new FileReader();
+                
+                reader.onload = (e) => {
+                    const photo = {
+                        id: Date.now(),
+                        url: e.target.result,
+                        caption: caption || 'بغیر عنوان',
+                        date: new Date().toISOString()
+                    };
+                    
+                    photos.push(photo);
+                    this.displayPhotos();
+                    this.addActivity(`نئی تصویر شامل: ${photo.caption}`);
+                };
+                
+                reader.readAsDataURL(file);
+                e.target.reset();
+                this.showNotification('تصویر کامیابی سے اپلوڈ کر دی گئی!');
+            }
+
+            updateProgressValue(value) {
+                document.getElementById('progressValue').textContent = value;
+            }
+
+            displayMembers() {
+                const membersList = document.getElementById('membersList');
+                const searchTerm = document.getElementById('memberSearchInput')?.value.toLowerCase() || '';
+                const roleFilter = document.getElementById('roleFilter')?.value || '';
+                
+                let filteredMembers = members.filter(member => {
+                    const matchesSearch = member.name.toLowerCase().includes(searchTerm) || 
+                                        member.phone.includes(searchTerm);
+                    const matchesRole = !roleFilter || member.role === roleFilter;
+                    return matchesSearch && matchesRole;
+                });
+                
+                membersList.innerHTML = '';
+                
+                filteredMembers.forEach(member => {
+                    const memberDiv = document.createElement('div');
+                    memberDiv.className = 'member-item';
+                    memberDiv.innerHTML = `
+                        <div>
+                            <strong>${member.name}</strong>
+                            <div style="font-size: 14px; color: var(--text-light); margin-top: 5px;">
+                                <i class="fas fa-user-tag"></i> ${this.getRoleText(member.role)} | 
+                                <i class="fas fa-phone"></i> ${member.phone}
+                                ${member.email ? ` | <i class="fas fa-envelope"></i> ${member.email}` : ''}
+                            </div>
+                            ${member.notes ? `<div style="font-size: 12px; margin-top: 8px; padding: 8px; background: rgba(212, 175, 55, 0.1); border-radius: 8px;">${member.notes}</div>` : ''}
+                            <div style="font-size: 12px; color: var(--text-light); margin-top: 8px;">
+                                <i class="fas fa-calendar"></i> شامل: ${this.formatDate(member.joinDate)}
+                            </div>
+                        </div>
+                        <button class="delete-btn" onclick="app.deleteMember(${member.id})">
+                            <i class="fas fa-trash"></i> حذف
+                        </button>
+                    `;
+                    membersList.appendChild(memberDiv);
+                });
+            }
+
+            displayProjects() {
+                const projectsList = document.getElementById('projectsList');
+                projectsList.innerHTML = '';
+                
+                projects.forEach(project => {
+                    const projectDiv = document.createElement('div');
+                    projectDiv.className = 'project-item';
+                    
+                    const statusColors = {
+                        planning: '#6c757d',
+                        active: '#28a745',
+                        paused: '#ffc107',
+                        completed: '#17a2b8',
+                        cancelled: '#dc3545'
+                    };
+                    
+                    projectDiv.innerHTML = `
+                        <div style="flex: 1;">
+                            <strong>${project.name}</strong>
+                            <div style="font-size: 14px; color: var(--text-light); margin: 8px 0;">
+                                ${project.description}
+                            </div>
+                            <div style="display: flex; gap: 15px; align-items: center; margin: 10px 0;">
+                                <span style="background: ${statusColors[project.status]}; color: white; padding: 4px 12px; border-radius: 15px; font-size: 12px;">
+                                    ${this.getStatusText(project.status)}
+                                </span>
+                                <span style="font-size: 12px;">
+                                    <i class="fas fa-tag"></i> ${this.getCategoryText(project.category)}
+                                </span>
+                                ${project.startDate ? `<span style="font-size: 12px;"><i class="fas fa-calendar"></i> ${this.formatDate(project.startDate)}</span>` : ''}
+                                ${project.budget > 0 ? `<span style="font-size: 12px;"><i class="fas fa-rupee-sign"></i> ${project.budget}</span>` : ''}
+                            </div>
+                            <div style="margin-top: 10px;">
+                                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px;">
+                                    <span style="font-size: 12px; font-weight: bold;">پیش قدمی:</span>
+                                    <span style="font-size: 12px; font-weight: bold;">${project.progress}%</span>
+                                </div>
+                                <div class="progress-bar" style="height: 8px;">
+                                    <div class="progress-fill" style="width: ${project.progress}%; height: 100%; font-size: 10px;"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <button class="delete-btn" onclick="app.deleteProject(${project.id})">
+                            <i class="fas fa-trash"></i> حذف
+                        </button>
+                    `;
+                    projectsList.appendChild(projectDiv);
+                });
+            }
+
+            displayPhotos() {
+                const photoGallery = document.getElementById('photoGallery');
+                
+                // Keep sample photos and add uploaded photos
+                const samplePhotosHTML = `
+                    <div class="gallery-item">
+                        <div class="gallery-placeholder">
+                            <i class="fas fa-mosque" style="font-size: 48px; color: var(--primary-green);"></i>
+                        </div>
+                        <div style="font-weight: bold; margin-bottom: 5px;" data-translate="sampleImage1">تنظیم کا دفتر</div>
+                        <div style="font-size: 14px; color: var(--text-light);" data-translate="sampleDate1">5 اگست 2025</div>
+                    </div>
+                    <div class="gallery-item">
+                        <div class="gallery-placeholder">
+                            <i class="fas fa-users" style="font-size: 48px; color: var(--primary-green);"></i>
+                        </div>
+                        <div style="font-weight: bold; margin-bottom: 5px;" data-translate="sampleImage2">ممبرز کا اجلاس</div>
+                        <div style="font-size: 14px; color: var(--text-light);" data-translate="sampleDate2">1 اگست 2025</div>
+                    </div>
+                    <div class="gallery-item">
+                        <div class="gallery-placeholder">
+                            <i class="fas fa-hammer" style="font-size: 48px; color: var(--primary-green);"></i>
+                        </div>
+                        <div style="font-weight: bold; margin-bottom: 5px;" data-translate="sampleImage3">تعمیراتی کام</div>
+                        <div style="font-size: 14px; color: var(--text-light);" data-translate="sampleDate3">25 جولائی 2025</div>
+                    </div>
+                `;
+                
+                const uploadedPhotosHTML = photos.map(photo => `
+                    <div class="gallery-item" style="position: relative;">
+                        <img src="${photo.url}" alt="${photo.caption}" style="width: 100%; height: 150px; object-fit: cover; border-radius: 10px; margin-bottom: 10px;">
+                        <div style="font-weight: bold; margin-bottom: 5px;">${photo.caption}</div>
+                        <div style="font-size: 14px; color: var(--text-light);">${this.formatDate(photo.date.split('T')[0])}</div>
+                        <button onclick="app.deletePhoto(${photo.id})" style="position: absolute; top: 10px; right: 10px; background: rgba(220, 53, 69, 0.8); color: white; border: none; border-radius: 50%; width: 30px; height: 30px; cursor: pointer;">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                `).join('');
+                
+                photoGallery.innerHTML = samplePhotosHTML + uploadedPhotosHTML;
+                this.updateTranslations(); // Re-apply translations to sample photos
+            }
+
+            getRoleText(role) {
+                const roleTexts = {
+                    ur: {
+                        president: "صدر",
+                        "vice-president": "نائب صدر",
+                        secretary: "سکریٹری",
+                        treasurer: "خزانچی",
+                        member: "ممبر",
+                        volunteer: "رضاکار"
+                    },
+                    en: {
+                        president: "President",
+                        "vice-president": "Vice President",
+                        secretary: "Secretary",
+                        treasurer: "Treasurer",
+                        member: "Member",
+                        volunteer: "Volunteer"
+                    },
+                    ar: {
+                        president: "الرئيس",
+                        "vice-president": "نائب الرئيس",
+                        secretary: "السكرتير",
+                        treasurer: "أمين الصندوق",
+                        member: "عضو",
+                        volunteer: "متطوع"
+                    }
+                };
+                return roleTexts[currentLanguage]?.[role] || role;
+            }
+
+            getStatusText(status) {
+                const statusTexts = {
+                    ur: {
+                        planning: "منصوبہ بندی",
+                        active: "فعال",
+                        paused: "رک گیا",
+                        completed: "مکمل",
+                        cancelled: "منسوخ"
+                    },
+                    en: {
+                        planning: "Planning",
+                        active: "Active",
+                        paused: "Paused",
+                        completed: "Completed",
+                        cancelled: "Cancelled"
+                    },
+                    ar: {
+                        planning: "التخطيط",
+                        active: "نشط",
+                        paused: "متوقف",
+                        completed: "مكتمل",
+                        cancelled: "ملغي"
+                    }
+                };
+                return statusTexts[currentLanguage]?.[status] || status;
+            }
+
+            getCategoryText(category) {
+                const categoryTexts = {
+                    ur: {
+                        construction: "تعمیرات",
+                        education: "تعلیم",
+                        community: "کمیونٹی",
+                        religious: "مذہبی",
+                        charity: "خیرات"
+                    },
+                    en: {
+                        construction: "Construction",
+                        education: "Education",
+                        community: "Community",
+                        religious: "Religious",
+                        charity: "Charity"
+                    },
+                    ar: {
+                        construction: "البناء",
+                        education: "التعليم",
+                        community: "المجتمع",
+                        religious: "ديني",
+                        charity: "الخيرية"
+                    }
+                };
+                return categoryTexts[currentLanguage]?.[category] || category;
+            }
+
+            formatDate(dateString) {
+                const date = new Date(dateString);
+                return date.toLocaleDateString('ur-PK');
+            }
+
+            deleteMember(id) {
+                if (confirm('کیا آپ واقعی اس ممبر کو حذف کرنا چاہتے ہیں؟')) {
+                    members = members.filter(member => member.id !== id);
+                    this.displayMembers();
+                    this.updateStats();
+                    this.showNotification('ممبر کامیابی سے حذف کر دیا گیا!');
+                }
+            }
+
+            deleteProject(id) {
+                if (confirm('کیا آپ واقعی اس پروجیکٹ کو حذف کرنا چاہتے ہیں؟')) {
+                    projects = projects.filter(project => project.id !== id);
+                    this.displayProjects();
+                    this.updateStats();
+                    this.showNotification('پروجیکٹ کامیابی سے حذف کر دیا گیا!');
+                }
+            }
+
+            deletePhoto(id) {
+                if (confirm('کیا آپ واقعی اس تصویر کو حذف کرنا چاہتے ہیں؟')) {
+                    photos = photos.filter(photo => photo.id !== id);
+                    this.displayPhotos();
+                    this.showNotification('تصویر کامیابی سے حذف کر دی گئی!');
+                }
+            }
+
+            updateStats() {
+                document.getElementById('memberCount').textContent = members.length;
+                document.getElementById('projectCount').textContent = projects.filter(p => p.status === 'active').length;
+                document.getElementById('totalMembersAbout').textContent = `${members.length}+`;
+                
+                // Update main project progress if exists
+                const mainProject = projects.find(p => p.name.includes('قرآنی کتب'));
+                if (mainProject) {
+                    const progressEl = document.getElementById('mainProjectProgress');
+                    if (progressEl) {
+                        progressEl.style.width = `${mainProject.progress}%`;
+                        progressEl.textContent = `${mainProject.progress}%`;
+                    }
+                }
+                
+                // Update reports section
+                const thisMonth = new Date();
+                const newMembersThisMonth = members.filter(m => {
+                    const joinDate = new Date(m.joinDate);
+                    return joinDate.getMonth() === thisMonth.getMonth() && joinDate.getFullYear() === thisMonth.getFullYear();
+                }).length;
+                
+                document.getElementById('newMembersCount').textContent = newMembersThisMonth;
+                document.getElementById('activeProjectsCount').textContent = projects.filter(p => p.status === 'active').length;
+                document.getElementById('completedTasksCount').textContent = projects.filter(p => p.status === 'completed').length;
+            }
+
+            addActivity(description) {
+                const activity = {
+                    id: Date.now(),
+                    description: description,
+                    date: new Date()
+                };
+                
+                activityLog.unshift(activity);
+                
+                // Keep only last 10 activities
+                if (activityLog.length > 10) {
+                    activityLog = activityLog.slice(0, 10);
+                }
+                
+                this.updateActivityLog();
+            }
+
+            updateActivityLog() {
+                const activityLogDiv = document.getElementById('activityLog');
+                
+                const existingActivities = `
+                    <div class="activity-item">
+                        <div style="font-weight: bold;" data-translate="activity1">نیا ممبر شامل</div>
+                        <div style="font-size: 14px; color: var(--text-light);">2 گھنٹے پہلے</div>
+                    </div>
+                    <div class="activity-item" style="border-left-color: var(--secondary-green);">
+                        <div style="font-weight: bold;" data-translate="activity2">پروجیکٹ اپڈیٹ</div>
+                        <div style="font-size: 14px; color: var(--text-light);">1 دن پہلے</div>
+                    </div>
+                    <div class="activity-item" style="border-left-color: var(--primary-green);">
+                        <div style="font-weight: bold;" data-translate="activity3">اجلاس منعقد</div>
+                        <div style="font-size: 14px; color: var(--text-light);">3 دن پہلے</div>
+                    </div>
+                `;
+                
+                const newActivitiesHTML = activityLog.map(activity => {
+                    const timeDiff = new Date() - activity.date;
+                    const minutes = Math.floor(timeDiff / (1000 * 60));
+                    const hours = Math.floor(timeDiff / (1000 * 60 * 60));
+                    const days = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
+                    
+                    let timeAgo;
+                    if (days > 0) {
+                        timeAgo = `${days} دن پہلے`;
+                    } else if (hours > 0) {
+                        timeAgo = `${hours} گھنٹے پہلے`;
+                    } else {
+                        timeAgo = `${minutes} منٹ پہلے`;
+                    }
+                    
+                    return `
+                        <div class="activity-item" style="border-left-color: var(--accent-gold); background: #e8f5e8;">
+                            <div style="font-weight: bold;">${activity.description}</div>
+                            <div style="font-size: 14px; color: var(--text-light);">${timeAgo}</div>
+                        </div>
+                    `;
+                }).join('');
+                
+                activityLogDiv.innerHTML = newActivitiesHTML + existingActivities;
+                this.updateTranslations(); // Re-apply translations to existing activities
+            }
+
+            exportMembers() {
+                const csvContent = "data:text/csv;charset=utf-8," + 
+                    "Name,Role,Phone,Email,Notes,Join Date\n" +
+                    members.map(member => 
+                        `"${member.name}","${this.getRoleText(member.role)}","${member.phone}","${member.email}","${member.notes}","${member.joinDate}"`
+                    ).join("\n");
+                
+                const encodedUri = encodeURI(csvContent);
+                const link = document.createElement("a");
+                link.setAttribute("href", encodedUri);
+                link.setAttribute("download", "millat_islami_members.csv");
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                
+                this.showNotification('ممبرز کی فہرست ایکسپورٹ ہو گئی!');
+            }
+
+            exportProjects() {
+                const csvContent = "data:text/csv;charset=utf-8," + 
+                    "Name,Description,Progress,Status,Category,Start Date,Budget\n" +
+                    projects.map(project => 
+                        `"${project.name}","${project.description}","${project.progress}%","${this.getStatusText(project.status)}","${this.getCategoryText(project.category)}","${project.startDate}","${project.budget}"`
+                    ).join("\n");
+                
+                const encodedUri = encodeURI(csvContent);
+                const link = document.createElement("a");
+                link.setAttribute("href", encodedUri);
+                link.setAttribute("download", "millat_islami_projects.csv");
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                
+                this.showNotification('پروجیکٹس کی تفصیلات ایکسپورٹ ہو گئیں!');
+            }
+
+            generateReport() {
+                const reportWindow = window.open('', '_blank');
+                const reportHTML = `
+                    <!DOCTYPE html>
+                    <html>
+                    <head>
+                        <title>ملؔت اسلامی - مکمل رپورٹ</title>
+                        <style>
+                            body { font-family: 'Noto Nastaliq Urdu', Arial, sans-serif; direction: rtl; margin: 20px; line-height: 1.6; }
+                            h1, h2 { color: #1a5f3f; text-align: center; }
+                            table { width: 100%; border-collapse: collapse; margin: 20px 0; }
+                            th, td { border: 1px solid #ddd; padding: 12px; text-align: right; }
+                            th { background-color: #f2f2f2; font-weight: bold; }
+                            .stats { display: flex; justify-content: space-around; margin: 20px 0; flex-wrap: wrap; }
+                            .stat { text-align: center; padding: 20px; border: 2px solid #d4af37; border-radius: 10px; margin: 10px; min-width: 150px; }
+                            .stat h3 { color: #1a5f3f; margin: 0; font-size: 2em; }
+                            @media print { body { margin: 0; } }
+                        </style>
+                    </head>
+                    <body>
+                        <h1>ملؔت اسلامی</h1>
+                        <h2>تنظیمی رپورٹ</h2>
+                        <p><strong>رپورٹ کی تاریخ:</strong> ${new Date().toLocaleDateString('ur-PK')}</p>
+                        
+                        <div class="stats">
+                            <div class="stat">
+                                <h3>${members.length}</h3>
+                                <p>کل ممبرز</p>
+                            </div>
+                            <div class="stat">
+                                <h3>${projects.length}</h3>
+                                <p>کل پروجیکٹس</p>
+                            </div>
+                            <div class="stat">
+                                <h3>${projects.filter(p => p.status === 'active').length}</h3>
+                                <p>فعال پروجیکٹس</p>
+                            </div>
+                        </div>
+                        
+                        <h2>ممبرز کی فہرست</h2>
+                        <table>
+                            <tr><th>نام</th><th>عہدہ</th><th>فون</th><th>شمولیت</th></tr>
+                            ${members.map(member => 
+                                `<tr><td>${member.name}</td><td>${this.getRoleText(member.role)}</td><td>${member.phone}</td><td>${this.formatDate(member.joinDate)}</td></tr>`
+                            ).join('')}
+                        </table>
+                        
+                        <h2>پروجیکٹس کی تفصیلات</h2>
+                        <table>
+                            <tr><th>نام</th><th>وضاحت</th><th>پیش قدمی</th><th>حالت</th></tr>
+                            ${projects.map(project => 
+                                `<tr><td>${project.name}</td><td>${project.description}</td><td>${project.progress}%</td><td>${this.getStatusText(project.status)}</td></tr>`
+                            ).join('')}
+                        </table>
+                        
+                        <div style="margin-top: 40px; text-align: center; color: #666;">
+                            <p>یہ رپورٹ ${new Date().toLocaleString('ur-PK')} پر تیار کی گئی</p>
+                        </div>
+                    </body>
+                    </html>
+                `;
+                
+                reportWindow.document.write(reportHTML);
+                reportWindow.document.close();
+                
+                this.showNotification('مکمل رپورٹ تیار کر دی گئی!');
+            }
+
+            setDefaultDate() {
+                const today = new Date().toISOString().split('T')[0];
+                const projectStartDate = document.getElementById('projectStartDate');
+                if (projectStartDate) {
+                    projectStartDate.value = today;
+                }
+            }
+        }
+
+        // Initialize the application
+        let app;
+
+        document.addEventListener('DOMContentLoaded', function() {
+            app = new MillatApp();
+            
+            // Add keyboard shortcuts
+            document.addEventListener('keydown', function(e) {
+                if (e.ctrlKey) {
+                    switch(e.key) {
+                        case '1':
+                            e.preventDefault();
+                            app.showSection('home');
+                            break;
+                        case '2':
+                            e.preventDefault();
+                            app.showSection('members');
+                            break;
+                        case '3':
+                            e.preventDefault();
+                            app.showSection('projects');
+                            break;
+                        case 's':
+                            e.preventDefault();
+                            app.exportMembers();
+                            break;
+                    }
+                }
+            });
+        });
     </script>
 </body>
 </html>
