@@ -1,0 +1,15 @@
+{
+  "name": "millat-e-islami",
+  "version": "2.0.0",
+  "description": "Institutional Log System - Millat-e-Islami",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "express-session": "^1.17.3",
+    "bcryptjs": "^2.4.3",
+    "mongodb": "^6.5.0"
+  }
+}

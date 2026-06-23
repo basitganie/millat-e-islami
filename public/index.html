@@ -1,0 +1,1526 @@
+<!DOCTYPE html>
+<html lang="ur" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ملت اسلامی | نظام ریکارڈ</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Nastaliq+Urdu:wght@400;500;600;700&family=Amiri:wght@400;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --gold:    #c9a227;
+  --gold2:   #f0c040;
+  --green:   #1a4731;
+  --green2:  #2d6a4f;
+  --green3:  #52b788;
+  --dark:    #0d1f17;
+  --card:    #152b1e;
+  --border:  #2d6a4f44;
+  --text:    #f0ede6;
+  --muted:   #a09880;
+  --red:     #e05252;
+  --blue:    #4a90d9;
+  --radius:  12px;
+  --shadow:  0 4px 24px rgba(0,0,0,0.4);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Noto Nastaliq Urdu', 'Amiri', 'Inter', sans-serif;
+  background: var(--dark);
+  color: var(--text);
+  min-height: 100vh;
+  direction: rtl;
+}
+body.lang-en { direction: ltr; font-family: 'Inter', sans-serif; }
+
+/* ─── SCROLLBAR ─── */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--dark); }
+::-webkit-scrollbar-thumb { background: var(--green2); border-radius: 3px; }
+
+/* ─── LAYOUT ─── */
+.app { display: flex; min-height: 100vh; }
+.sidebar {
+  width: 260px; min-width: 260px;
+  background: linear-gradient(180deg, #0a1a10 0%, #0d2218 100%);
+  border-left: 1px solid var(--border);
+  display: flex; flex-direction: column;
+  position: fixed; top: 0; right: 0; height: 100vh;
+  z-index: 100; transition: transform .3s;
+}
+body.lang-en .sidebar { right: auto; left: 0; border-left: none; border-right: 1px solid var(--border); }
+.sidebar-logo {
+  padding: 28px 20px 20px;
+  border-bottom: 1px solid var(--border);
+  text-align: center;
+}
+.logo-arabic {
+  font-family: 'Amiri', serif;
+  font-size: 26px;
+  color: var(--gold);
+  line-height: 1.4;
+  display: block;
+}
+.logo-sub {
+  font-size: 11px;
+  color: var(--muted);
+  margin-top: 4px;
+  letter-spacing: 1px;
+  font-family: 'Inter', sans-serif;
+}
+.sidebar-nav { flex: 1; overflow-y: auto; padding: 16px 0; }
+.nav-item {
+  display: flex; align-items: center; gap: 12px;
+  padding: 12px 20px; cursor: pointer;
+  color: var(--muted); font-size: 15px;
+  border-right: 3px solid transparent;
+  transition: all .2s; text-decoration: none;
+}
+body.lang-en .nav-item { border-right: none; border-left: 3px solid transparent; }
+.nav-item:hover { color: var(--text); background: rgba(201,162,39,.07); }
+.nav-item.active { color: var(--gold); border-right-color: var(--gold); background: rgba(201,162,39,.1); }
+body.lang-en .nav-item.active { border-right-color: transparent; border-left-color: var(--gold); }
+.nav-icon { font-size: 18px; width: 22px; text-align: center; }
+.sidebar-footer {
+  padding: 16px 20px;
+  border-top: 1px solid var(--border);
+  display: flex; flex-direction: column; gap: 8px;
+}
+.lang-btns { display: flex; gap: 6px; }
+.lang-btn {
+  flex: 1; padding: 6px; border: 1px solid var(--border);
+  background: transparent; color: var(--muted); border-radius: 6px;
+  cursor: pointer; font-size: 11px; font-family: 'Inter', sans-serif;
+  transition: all .2s;
+}
+.lang-btn.active { background: var(--gold); color: var(--dark); border-color: var(--gold); font-weight: 600; }
+.admin-btn {
+  padding: 8px 14px; border-radius: 8px; border: 1px solid var(--border);
+  background: transparent; color: var(--muted); cursor: pointer;
+  font-size: 13px; text-align: center; transition: all .2s;
+}
+.admin-btn:hover { border-color: var(--gold); color: var(--gold); }
+.admin-btn.logged-in { border-color: var(--green3); color: var(--green3); }
+
+/* ─── MAIN CONTENT ─── */
+.main {
+  flex: 1;
+  margin-right: 260px;
+  min-height: 100vh;
+  display: flex; flex-direction: column;
+}
+body.lang-en .main { margin-right: 0; margin-left: 260px; }
+.topbar {
+  background: rgba(13,31,23,0.95);
+  border-bottom: 1px solid var(--border);
+  padding: 16px 28px;
+  display: flex; align-items: center; justify-content: space-between;
+  position: sticky; top: 0; z-index: 50;
+  backdrop-filter: blur(10px);
+}
+.topbar-title { font-size: 20px; color: var(--text); }
+.topbar-sub { font-size: 12px; color: var(--muted); margin-top: 2px; font-family: 'Inter', sans-serif; }
+.page { padding: 28px; flex: 1; display: none; }
+.page.active { display: block; }
+
+/* ─── COMPONENTS ─── */
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+}
+.stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px,1fr)); gap: 16px; margin-bottom: 28px; }
+.stat-card {
+  background: linear-gradient(135deg, var(--card), #1e3d28);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px; text-align: center;
+  position: relative; overflow: hidden;
+}
+.stat-card::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0; height: 3px;
+  background: var(--gold);
+}
+.stat-number { font-size: 40px; font-weight: 700; color: var(--gold); line-height: 1; font-family: 'Inter', sans-serif; }
+.stat-label { font-size: 13px; color: var(--muted); margin-top: 6px; }
+
+.section-title {
+  font-size: 18px; color: var(--gold);
+  margin-bottom: 16px; padding-bottom: 10px;
+  border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; gap: 10px;
+}
+.badge {
+  display: inline-block; padding: 3px 10px; border-radius: 20px;
+  font-size: 11px; font-family: 'Inter', sans-serif;
+}
+.badge-active   { background: rgba(82,183,136,.2); color: var(--green3); border: 1px solid var(--green3)44; }
+.badge-done     { background: rgba(74,144,217,.2); color: var(--blue);   border: 1px solid #4a90d944; }
+.badge-pending  { background: rgba(240,192,64,.2); color: var(--gold2);  border: 1px solid #f0c04044; }
+.badge-paused   { background: rgba(160,152,128,.2); color: var(--muted); border: 1px solid #a0988044; }
+.badge-red      { background: rgba(224,82,82,.2); color: var(--red);     border: 1px solid #e0525244; }
+
+/* ─── TABLE ─── */
+.table-wrap { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; }
+th { background: rgba(201,162,39,.08); color: var(--gold); font-size: 13px; padding: 12px 14px; text-align: right; font-weight: 500; border-bottom: 1px solid var(--border); }
+body.lang-en th { text-align: left; }
+td { padding: 12px 14px; border-bottom: 1px solid var(--border)66; font-size: 14px; vertical-align: middle; }
+tr:hover td { background: rgba(255,255,255,.02); }
+.action-btns { display: flex; gap: 8px; }
+.btn-icon {
+  padding: 5px 10px; border-radius: 6px; border: 1px solid;
+  cursor: pointer; font-size: 12px; background: transparent;
+  transition: all .2s;
+}
+.btn-edit  { border-color: var(--blue)66; color: var(--blue); }
+.btn-edit:hover  { background: rgba(74,144,217,.15); }
+.btn-del   { border-color: var(--red)66;  color: var(--red); }
+.btn-del:hover   { background: rgba(224,82,82,.15); }
+.btn-view  { border-color: var(--green3)66; color: var(--green3); }
+.btn-view:hover  { background: rgba(82,183,136,.15); }
+
+/* ─── BUTTONS ─── */
+.btn {
+  padding: 10px 20px; border-radius: 8px; border: none;
+  cursor: pointer; font-size: 14px; transition: all .2s;
+  font-family: inherit; display: inline-flex; align-items: center; gap: 8px;
+}
+.btn-primary { background: var(--gold); color: var(--dark); font-weight: 600; }
+.btn-primary:hover { background: var(--gold2); }
+.btn-secondary { background: transparent; border: 1px solid var(--border); color: var(--text); }
+.btn-secondary:hover { border-color: var(--gold); color: var(--gold); }
+.btn-danger { background: var(--red); color: white; }
+.btn-sm { padding: 7px 14px; font-size: 12px; }
+
+/* ─── FORMS ─── */
+.form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.form-group { display: flex; flex-direction: column; gap: 6px; }
+.form-group.full { grid-column: 1 / -1; }
+label { font-size: 12px; color: var(--muted); }
+input, textarea, select {
+  background: rgba(255,255,255,.05);
+  border: 1px solid var(--border);
+  border-radius: 8px; padding: 10px 14px;
+  color: var(--text); font-size: 14px;
+  font-family: inherit; width: 100%;
+  transition: border-color .2s;
+}
+input:focus, textarea:focus, select:focus {
+  outline: none; border-color: var(--gold);
+  background: rgba(255,255,255,.07);
+}
+textarea { resize: vertical; min-height: 80px; }
+select option { background: var(--dark); }
+
+/* ─── TOOLBAR ─── */
+.toolbar {
+  display: flex; align-items: center; gap: 12px;
+  margin-bottom: 20px; flex-wrap: wrap;
+}
+.search-wrap {
+  flex: 1; position: relative; min-width: 200px;
+}
+.search-wrap input { padding-right: 36px; }
+body.lang-en .search-wrap input { padding-right: 14px; padding-left: 36px; }
+.search-icon {
+  position: absolute; right: 12px; top: 50%; transform: translateY(-50%);
+  color: var(--muted); pointer-events: none;
+}
+body.lang-en .search-icon { right: auto; left: 12px; }
+
+/* ─── MODAL ─── */
+.modal-bg {
+  display: none; position: fixed; inset: 0;
+  background: rgba(0,0,0,.7); z-index: 999;
+  align-items: center; justify-content: center;
+  backdrop-filter: blur(4px);
+}
+.modal-bg.open { display: flex; }
+.modal {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 16px; padding: 28px;
+  width: 90%; max-width: 620px;
+  max-height: 90vh; overflow-y: auto;
+  box-shadow: var(--shadow);
+}
+.modal-header {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-bottom: 24px;
+}
+.modal-title { font-size: 18px; color: var(--gold); }
+.modal-close {
+  background: none; border: none; color: var(--muted);
+  font-size: 22px; cursor: pointer; padding: 0 4px;
+}
+.modal-close:hover { color: var(--red); }
+.modal-footer { display: flex; gap: 10px; justify-content: flex-end; margin-top: 24px; }
+
+/* ─── DETAIL PANEL ─── */
+.detail-panel {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 24px; margin-bottom: 24px;
+}
+.detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.detail-item label { font-size: 11px; color: var(--muted); display: block; margin-bottom: 4px; }
+.detail-item .val { font-size: 14px; }
+.divider { border: none; border-top: 1px solid var(--border); margin: 20px 0; }
+.updates-list { display: flex; flex-direction: column; gap: 10px; }
+.update-item {
+  background: rgba(255,255,255,.03);
+  border: 1px solid var(--border);
+  border-radius: 8px; padding: 12px;
+  display: flex; gap: 12px; align-items: flex-start;
+}
+.update-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--green3); margin-top: 5px; flex-shrink: 0; }
+.update-text { flex: 1; font-size: 13px; }
+.update-date { font-size: 11px; color: var(--muted); font-family: 'Inter', sans-serif; }
+
+/* ─── TOAST ─── */
+.toast {
+  position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%);
+  background: var(--green2); color: white; padding: 12px 24px;
+  border-radius: 8px; font-size: 14px; z-index: 9999;
+  opacity: 0; transition: opacity .3s; pointer-events: none;
+}
+.toast.show { opacity: 1; }
+.toast.error { background: var(--red); }
+
+/* ─── MEMBER CARD ─── */
+.member-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px,1fr)); gap: 16px; }
+.member-card {
+  background: linear-gradient(135deg, var(--card), #1e3d28);
+  border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 20px; text-align: center;
+  transition: transform .2s, border-color .2s; cursor: pointer;
+}
+.member-card:hover { transform: translateY(-3px); border-color: var(--gold)66; }
+.member-avatar {
+  width: 64px; height: 64px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--green2), var(--green3));
+  display: flex; align-items: center; justify-content: center;
+  font-size: 26px; margin: 0 auto 12px;
+  border: 2px solid var(--gold)44;
+}
+.member-name { font-size: 15px; color: var(--text); margin-bottom: 4px; }
+.member-role { font-size: 12px; color: var(--gold); margin-bottom: 8px; }
+.member-phone { font-size: 12px; color: var(--muted); direction: ltr; }
+
+/* ─── MEETING LOG ─── */
+.meeting-item {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 20px; margin-bottom: 16px;
+  cursor: pointer; transition: border-color .2s;
+}
+.meeting-item:hover { border-color: var(--gold)66; }
+.meeting-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px; }
+.meeting-title { font-size: 16px; }
+.meeting-date { font-size: 12px; color: var(--muted); font-family: 'Inter', sans-serif; direction: ltr; }
+.meeting-meta { display: flex; gap: 12px; flex-wrap: wrap; font-size: 12px; color: var(--muted); }
+.meeting-decisions { margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border); font-size: 13px; color: var(--text)bb; }
+
+/* ─── LOGIN ─── */
+.login-box {
+  max-width: 360px; margin: 80px auto;
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: 16px; padding: 36px;
+}
+.login-title { font-size: 22px; color: var(--gold); text-align: center; margin-bottom: 24px; }
+
+/* ─── ADMIN PANEL ─── */
+.admin-section { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px; }
+
+/* ─── EMPTY STATE ─── */
+.empty {
+  text-align: center; padding: 60px 20px;
+  color: var(--muted);
+}
+.empty-icon { font-size: 48px; margin-bottom: 12px; }
+.empty-text { font-size: 15px; }
+
+/* ─── HAMBURGER ─── */
+.hamburger { display: none; background: none; border: none; color: var(--text); font-size: 24px; cursor: pointer; }
+.sidebar-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.5); z-index: 99; }
+
+@media (max-width: 768px) {
+  .hamburger { display: block; }
+  .sidebar { transform: translateX(100%); }
+  body.lang-en .sidebar { transform: translateX(-100%); }
+  .sidebar.open { transform: translateX(0); }
+  .sidebar-overlay.open { display: block; }
+  .main { margin-right: 0 !important; margin-left: 0 !important; }
+  .form-grid, .admin-section { grid-template-columns: 1fr; }
+  .detail-grid { grid-template-columns: 1fr; }
+  .stat-grid { grid-template-columns: 1fr 1fr; }
+}
+
+/* ─── ORNAMENT ─── */
+.ornament {
+  text-align: center; color: var(--gold)44;
+  font-size: 14px; letter-spacing: 4px; margin: 8px 0;
+  font-family: 'Amiri', serif;
+}
+.page-header { margin-bottom: 24px; }
+.page-header h2 { font-size: 22px; color: var(--text); }
+.page-header p { font-size: 13px; color: var(--muted); margin-top: 4px; }
+.filter-select { background: rgba(255,255,255,.05); border: 1px solid var(--border); border-radius: 8px; padding: 9px 14px; color: var(--text); font-family: inherit; font-size: 13px; cursor: pointer; }
+.filter-select:focus { outline: none; border-color: var(--gold); }
+
+.progress-bar-wrap { background: rgba(255,255,255,.05); border-radius: 99px; height: 6px; overflow: hidden; }
+.progress-bar { height: 100%; background: linear-gradient(90deg, var(--green2), var(--green3)); border-radius: 99px; transition: width .3s; }
+
+.tag-list { display: flex; flex-wrap: wrap; gap: 6px; }
+.tag { background: rgba(201,162,39,.12); border: 1px solid var(--gold)33; color: var(--gold); border-radius: 6px; padding: 3px 8px; font-size: 11px; font-family: 'Inter', sans-serif; }
+</style>
+</head>
+<body>
+
+<div class="toast" id="toast"></div>
+<div class="sidebar-overlay" id="overlay" onclick="toggleSidebar()"></div>
+
+<div class="app">
+  <!-- ─── SIDEBAR ─── -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-logo">
+      <span class="logo-arabic">بِسْمِ اللَّهِ</span>
+      <span class="logo-arabic" style="font-size:20px">ملت اسلامی</span>
+      <div class="ornament">✦ ✦ ✦</div>
+      <span class="logo-sub">MILLAT-E-ISLAMI LOG SYSTEM</span>
+    </div>
+    <nav class="sidebar-nav">
+      <a class="nav-item active" onclick="showPage('dashboard')" data-page="dashboard">
+        <span class="nav-icon">📊</span>
+        <span data-ur="ڈیش بورڈ" data-en="Dashboard">ڈیش بورڈ</span>
+      </a>
+      <a class="nav-item" onclick="showPage('members')" data-page="members">
+        <span class="nav-icon">👥</span>
+        <span data-ur="اراکین" data-en="Members">اراکین</span>
+      </a>
+      <a class="nav-item" onclick="showPage('projects')" data-page="projects">
+        <span class="nav-icon">📁</span>
+        <span data-ur="منصوبے" data-en="Projects">منصوبے</span>
+      </a>
+      <a class="nav-item" onclick="showPage('meetings')" data-page="meetings">
+        <span class="nav-icon">🕌</span>
+        <span data-ur="اجلاس" data-en="Meetings">اجلاس</span>
+      </a>
+      <a class="nav-item" id="admin-nav-item" onclick="showPage('admin')" data-page="admin" style="display:none">
+        <span class="nav-icon">⚙️</span>
+        <span data-ur="ایڈمن" data-en="Admin">ایڈمن</span>
+      </a>
+    </nav>
+    <div class="sidebar-footer">
+      <div class="lang-btns">
+        <button class="lang-btn active" onclick="setLang('ur')">اُردو</button>
+        <button class="lang-btn" onclick="setLang('ar')">عربي</button>
+        <button class="lang-btn" onclick="setLang('en')">EN</button>
+      </div>
+      <button class="admin-btn" id="adminBtn" onclick="toggleAdminLogin()">
+        🔐 <span data-ur="ایڈمن لاگ ان" data-en="Admin Login">ایڈمن لاگ ان</span>
+      </button>
+    </div>
+  </aside>
+
+  <!-- ─── MAIN ─── -->
+  <main class="main">
+    <header class="topbar">
+      <div>
+        <button class="hamburger" onclick="toggleSidebar()">☰</button>
+      </div>
+      <div style="text-align:center">
+        <div class="topbar-title" id="topbar-title">ڈیش بورڈ</div>
+        <div class="topbar-sub" id="topbar-sub">نظام ریکارڈ · ملت اسلامی</div>
+      </div>
+      <div style="font-family:'Inter';font-size:12px;color:var(--muted)" id="topbar-date"></div>
+    </header>
+
+    <!-- ─── DASHBOARD PAGE ─── -->
+    <div class="page active" id="page-dashboard">
+      <div class="stat-grid" id="stat-grid">
+        <div class="stat-card">
+          <div class="stat-number" id="stat-members">—</div>
+          <div class="stat-label" data-ur="کل اراکین" data-en="Total Members">کل اراکین</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number" id="stat-projects">—</div>
+          <div class="stat-label" data-ur="فعال منصوبے" data-en="Active Projects">فعال منصوبے</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number" id="stat-meetings">—</div>
+          <div class="stat-label" data-ur="کل اجلاس" data-en="Total Meetings">کل اجلاس</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number" id="stat-done">—</div>
+          <div class="stat-label" data-ur="مکمل منصوبے" data-en="Completed Projects">مکمل منصوبے</div>
+        </div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px" class="dash-grid">
+        <div class="card">
+          <div class="section-title">🕌 <span data-ur="حالیہ اجلاس" data-en="Recent Meetings">حالیہ اجلاس</span></div>
+          <div id="dash-meetings"><div class="empty"><div class="empty-icon">📋</div></div></div>
+        </div>
+        <div class="card">
+          <div class="section-title">📁 <span data-ur="حالیہ منصوبے" data-en="Recent Projects">حالیہ منصوبے</span></div>
+          <div id="dash-projects"><div class="empty"><div class="empty-icon">📁</div></div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ─── MEMBERS PAGE ─── -->
+    <div class="page" id="page-members">
+      <div class="page-header">
+        <h2 data-ur="اراکین کا ریکارڈ" data-en="Members Registry">اراکین کا ریکارڈ</h2>
+        <p data-ur="ادارے کے تمام اراکین کی معلومات" data-en="All institutional members info">ادارے کے تمام اراکین کی معلومات</p>
+      </div>
+      <div class="toolbar">
+        <div class="search-wrap">
+          <span class="search-icon">🔍</span>
+          <input type="text" id="member-search" placeholder="نام یا عہدے سے تلاش کریں..." oninput="filterMembers()">
+        </div>
+        <select class="filter-select" id="member-role-filter" onchange="filterMembers()">
+          <option value="">— تمام عہدے —</option>
+        </select>
+        <button class="btn btn-primary admin-only" style="display:none" onclick="openMemberModal()">
+          ＋ <span data-ur="نیا رکن" data-en="Add Member">نیا رکن</span>
+        </button>
+      </div>
+      <div id="member-view-toggle" style="display:flex;gap:8px;margin-bottom:16px">
+        <button class="btn btn-sm btn-secondary active-view" onclick="setMemberView('grid')" id="view-grid">⊞ گرڈ</button>
+        <button class="btn btn-sm btn-secondary" onclick="setMemberView('table')" id="view-table">☰ ٹیبل</button>
+      </div>
+      <div id="members-grid" class="member-grid"></div>
+      <div id="members-table" style="display:none">
+        <div class="card table-wrap">
+          <table>
+            <thead><tr>
+              <th data-ur="نام (اردو)" data-en="Name (Urdu)">نام (اردو)</th>
+              <th data-ur="نام (English)" data-en="Name (English)">نام (English)</th>
+              <th data-ur="عہدہ" data-en="Role">عہدہ</th>
+              <th data-ur="رابطہ" data-en="Contact">رابطہ</th>
+              <th data-ur="تاریخ شمولیت" data-en="Joined">تاریخ شمولیت</th>
+              <th data-ur="اقدام" data-en="Actions">اقدام</th>
+            </tr></thead>
+            <tbody id="members-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ─── PROJECTS PAGE ─── -->
+    <div class="page" id="page-projects">
+      <div class="page-header">
+        <h2 data-ur="منصوبوں کا ریکارڈ" data-en="Projects Log">منصوبوں کا ریکارڈ</h2>
+        <p data-ur="تمام منصوبوں کی پیش رفت اور تفصیل" data-en="Progress & details of all projects">تمام منصوبوں کی پیش رفت اور تفصیل</p>
+      </div>
+      <div class="toolbar">
+        <div class="search-wrap">
+          <span class="search-icon">🔍</span>
+          <input type="text" id="project-search" placeholder="منصوبے کا نام..." oninput="filterProjects()">
+        </div>
+        <select class="filter-select" id="project-status-filter" onchange="filterProjects()">
+          <option value="">— تمام حالت —</option>
+          <option value="active">فعال</option>
+          <option value="completed">مکمل</option>
+          <option value="pending">زیر التواء</option>
+          <option value="paused">معطل</option>
+        </select>
+        <button class="btn btn-primary admin-only" style="display:none" onclick="openProjectModal()">
+          ＋ <span data-ur="نیا منصوبہ" data-en="New Project">نیا منصوبہ</span>
+        </button>
+      </div>
+      <div id="projects-list"></div>
+    </div>
+
+    <!-- ─── MEETINGS PAGE ─── -->
+    <div class="page" id="page-meetings">
+      <div class="page-header">
+        <h2 data-ur="اجلاس کا ریکارڈ" data-en="Meetings Log">اجلاس کا ریکارڈ</h2>
+        <p data-ur="تمام اجلاسوں کی کارروائی اور فیصلے" data-en="Minutes and decisions of all meetings">تمام اجلاسوں کی کارروائی اور فیصلے</p>
+      </div>
+      <div class="toolbar">
+        <button class="btn btn-primary admin-only" style="display:none" onclick="openMeetingModal()">
+          ＋ <span data-ur="نیا اجلاس" data-en="New Meeting">نیا اجلاس</span>
+        </button>
+      </div>
+      <div id="meetings-list"></div>
+    </div>
+
+    <!-- ─── ADMIN PAGE ─── -->
+    <div class="page" id="page-admin">
+      <div class="page-header">
+        <h2 data-ur="ایڈمن پینل" data-en="Admin Panel">ایڈمن پینل</h2>
+      </div>
+      <div class="admin-section">
+        <div class="card">
+          <div class="section-title">🏛️ <span data-ur="ادارے کی معلومات" data-en="Organization Info">ادارے کی معلومات</span></div>
+          <div class="form-grid">
+            <div class="form-group">
+              <label>نام (اردو)</label>
+              <input id="org-name-ur" type="text">
+            </div>
+            <div class="form-group">
+              <label>Name (English)</label>
+              <input id="org-name-en" type="text">
+            </div>
+            <div class="form-group">
+              <label>اسم (عربي)</label>
+              <input id="org-name-ar" type="text" style="font-family:'Amiri',serif">
+            </div>
+            <div class="form-group">
+              <label>تاسیس / Founded</label>
+              <input id="org-founded" type="text">
+            </div>
+            <div class="form-group">
+              <label>مقام / Location</label>
+              <input id="org-location" type="text">
+            </div>
+            <div class="form-group">
+              <label>Tagline (Urdu)</label>
+              <input id="org-tagline-ur" type="text">
+            </div>
+            <div class="form-group full">
+              <label>تعارف (اردو)</label>
+              <textarea id="org-desc-ur"></textarea>
+            </div>
+            <div class="form-group full">
+              <label>Description (English)</label>
+              <textarea id="org-desc-en"></textarea>
+            </div>
+          </div>
+          <div style="margin-top:16px">
+            <button class="btn btn-primary" onclick="saveOrgInfo()">💾 <span data-ur="محفوظ کریں" data-en="Save">محفوظ کریں</span></button>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="section-title">🔐 <span data-ur="پاسورڈ تبدیل کریں" data-en="Change Password">پاسورڈ تبدیل کریں</span></div>
+          <div class="form-group" style="margin-bottom:16px">
+            <label data-ur="نیا پاسورڈ" data-en="New Password">نیا پاسورڈ</label>
+            <input id="new-password" type="password" placeholder="کم از کم 6 حروف">
+          </div>
+          <div class="form-group" style="margin-bottom:16px">
+            <label data-ur="پاسورڈ دوبارہ" data-en="Confirm Password">پاسورڈ دوبارہ</label>
+            <input id="confirm-password" type="password">
+          </div>
+          <button class="btn btn-primary" onclick="changePassword()">🔑 <span data-ur="تبدیل کریں" data-en="Change">تبدیل کریں</span></button>
+          <hr class="divider">
+          <button class="btn btn-danger" onclick="doLogout()">🚪 <span data-ur="لاگ آؤٹ" data-en="Logout">لاگ آؤٹ</span></button>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<!-- ─── LOGIN MODAL ─── -->
+<div class="modal-bg" id="login-modal">
+  <div class="modal" style="max-width:360px">
+    <div class="modal-header">
+      <span class="modal-title">🔐 <span data-ur="ایڈمن لاگ ان" data-en="Admin Login">ایڈمن لاگ ان</span></span>
+      <button class="modal-close" onclick="closeModal('login-modal')">✕</button>
+    </div>
+    <div class="form-group" style="margin-bottom:16px">
+      <label data-ur="پاسورڈ" data-en="Password">پاسورڈ</label>
+      <input type="password" id="login-password" placeholder="••••••••"
+        onkeydown="if(event.key==='Enter')doLogin()">
+    </div>
+    <button class="btn btn-primary" style="width:100%" onclick="doLogin()">داخل ہوں</button>
+  </div>
+</div>
+
+<!-- ─── MEMBER MODAL ─── -->
+<div class="modal-bg" id="member-modal">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="modal-title" id="member-modal-title">نیا رکن شامل کریں</span>
+      <button class="modal-close" onclick="closeModal('member-modal')">✕</button>
+    </div>
+    <input type="hidden" id="member-id">
+    <div class="form-grid">
+      <div class="form-group">
+        <label>نام (اردو) *</label>
+        <input id="m-name-ur" type="text" placeholder="محمد علی">
+      </div>
+      <div class="form-group">
+        <label>Name (English)</label>
+        <input id="m-name-en" type="text" placeholder="Muhammad Ali">
+      </div>
+      <div class="form-group">
+        <label>عہدہ / Role</label>
+        <input id="m-role" type="text" placeholder="صدر / President">
+      </div>
+      <div class="form-group">
+        <label>📞 رابطہ نمبر</label>
+        <input id="m-phone" type="tel" placeholder="03001234567" dir="ltr">
+      </div>
+      <div class="form-group">
+        <label>📧 ای میل</label>
+        <input id="m-email" type="email" placeholder="name@example.com" dir="ltr">
+      </div>
+      <div class="form-group">
+        <label>📍 پتہ / Address</label>
+        <input id="m-address" type="text" placeholder="کشمیر">
+      </div>
+      <div class="form-group">
+        <label>تاریخ شمولیت</label>
+        <input id="m-joined" type="date">
+      </div>
+      <div class="form-group">
+        <label>حیثیت / Status</label>
+        <select id="m-status">
+          <option value="active">فعال</option>
+          <option value="inactive">غیر فعال</option>
+        </select>
+      </div>
+      <div class="form-group full">
+        <label>مختصر تعارف / Bio</label>
+        <textarea id="m-bio" placeholder="رکن کا مختصر تعارف..."></textarea>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="closeModal('member-modal')">منسوخ</button>
+      <button class="btn btn-primary" onclick="saveMember()">💾 محفوظ کریں</button>
+    </div>
+  </div>
+</div>
+
+<!-- ─── PROJECT MODAL ─── -->
+<div class="modal-bg" id="project-modal">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="modal-title" id="project-modal-title">نیا منصوبہ</span>
+      <button class="modal-close" onclick="closeModal('project-modal')">✕</button>
+    </div>
+    <input type="hidden" id="project-id">
+    <div class="form-grid">
+      <div class="form-group">
+        <label>عنوان (اردو) *</label>
+        <input id="p-title-ur" type="text" placeholder="منصوبے کا نام">
+      </div>
+      <div class="form-group">
+        <label>Title (English)</label>
+        <input id="p-title-en" type="text" placeholder="Project Title">
+      </div>
+      <div class="form-group">
+        <label>حالت / Status</label>
+        <select id="p-status">
+          <option value="active">فعال</option>
+          <option value="pending">زیر التواء</option>
+          <option value="completed">مکمل</option>
+          <option value="paused">معطل</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>پیش رفت % (0–100)</label>
+        <input id="p-progress" type="number" min="0" max="100" value="0" dir="ltr">
+      </div>
+      <div class="form-group">
+        <label>آغاز تاریخ / Start</label>
+        <input id="p-start" type="date">
+      </div>
+      <div class="form-group">
+        <label>اختتام تاریخ / End</label>
+        <input id="p-end" type="date">
+      </div>
+      <div class="form-group">
+        <label>ذمہ دار / Lead</label>
+        <input id="p-lead" type="text" placeholder="ذمہ دار رکن کا نام">
+      </div>
+      <div class="form-group">
+        <label>بجٹ / Budget (PKR)</label>
+        <input id="p-budget" type="text" placeholder="مثلاً: 50,000" dir="ltr">
+      </div>
+      <div class="form-group full">
+        <label>تفصیل (اردو)</label>
+        <textarea id="p-desc-ur" placeholder="منصوبے کی تفصیل..."></textarea>
+      </div>
+      <div class="form-group full">
+        <label>Description (English)</label>
+        <textarea id="p-desc-en" placeholder="Project description..."></textarea>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="closeModal('project-modal')">منسوخ</button>
+      <button class="btn btn-primary" onclick="saveProject()">💾 محفوظ کریں</button>
+    </div>
+  </div>
+</div>
+
+<!-- ─── MEETING MODAL ─── -->
+<div class="modal-bg" id="meeting-modal">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="modal-title" id="meeting-modal-title">نیا اجلاس</span>
+      <button class="modal-close" onclick="closeModal('meeting-modal')">✕</button>
+    </div>
+    <input type="hidden" id="meeting-id">
+    <div class="form-grid">
+      <div class="form-group">
+        <label>عنوان (اردو) *</label>
+        <input id="mt-title-ur" type="text" placeholder="اجلاس کا موضوع">
+      </div>
+      <div class="form-group">
+        <label>Title (English)</label>
+        <input id="mt-title-en" type="text" placeholder="Meeting Title">
+      </div>
+      <div class="form-group">
+        <label>تاریخ / Date *</label>
+        <input id="mt-date" type="date">
+      </div>
+      <div class="form-group">
+        <label>وقت / Time</label>
+        <input id="mt-time" type="time">
+      </div>
+      <div class="form-group">
+        <label>مقام / Venue</label>
+        <input id="mt-venue" type="text" placeholder="جائے اجلاس">
+      </div>
+      <div class="form-group">
+        <label>صدارت / Chaired By</label>
+        <input id="mt-chair" type="text" placeholder="صدر اجلاس">
+      </div>
+      <div class="form-group full">
+        <label>شرکاء / Attendees (کاما سے الگ کریں)</label>
+        <input id="mt-attendees" type="text" placeholder="احمد, علی, محمود, ...">
+      </div>
+      <div class="form-group full">
+        <label>ایجنڈا / Agenda</label>
+        <textarea id="mt-agenda" placeholder="اجلاس کا ایجنڈا..."></textarea>
+      </div>
+      <div class="form-group full">
+        <label>فیصلے / Decisions Made</label>
+        <textarea id="mt-decisions" placeholder="اجلاس میں کیے گئے فیصلے..."></textarea>
+      </div>
+      <div class="form-group full">
+        <label>اگلی کارروائی / Action Items</label>
+        <textarea id="mt-actions" placeholder="آئندہ کی جانے والی کارروائی..."></textarea>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="closeModal('meeting-modal')">منسوخ</button>
+      <button class="btn btn-primary" onclick="saveMeeting()">💾 محفوظ کریں</button>
+    </div>
+  </div>
+</div>
+
+<!-- ─── PROJECT DETAIL MODAL ─── -->
+<div class="modal-bg" id="project-detail-modal">
+  <div class="modal" style="max-width:700px">
+    <div class="modal-header">
+      <span class="modal-title" id="pd-title">منصوبے کی تفصیل</span>
+      <button class="modal-close" onclick="closeModal('project-detail-modal')">✕</button>
+    </div>
+    <div id="pd-body"></div>
+  </div>
+</div>
+
+<!-- ─── MEETING DETAIL MODAL ─── -->
+<div class="modal-bg" id="meeting-detail-modal">
+  <div class="modal" style="max-width:700px">
+    <div class="modal-header">
+      <span class="modal-title" id="md-title">اجلاس کی تفصیل</span>
+      <button class="modal-close" onclick="closeModal('meeting-detail-modal')">✕</button>
+    </div>
+    <div id="md-body"></div>
+  </div>
+</div>
+
+<!-- ─── MEMBER DETAIL MODAL ─── -->
+<div class="modal-bg" id="member-detail-modal">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="modal-title" id="mbd-title">رکن کی تفصیل</span>
+      <button class="modal-close" onclick="closeModal('member-detail-modal')">✕</button>
+    </div>
+    <div id="mbd-body"></div>
+  </div>
+</div>
+
+<script>
+// ─── STATE ──────────────────────────────────────────────────────────────────
+let isAdmin = false;
+let currentLang = 'ur';
+let allMembers = [], allProjects = [], allMeetings = [];
+let memberView = 'grid';
+
+// ─── INIT ───────────────────────────────────────────────────────────────────
+(async () => {
+  setDate();
+  const res = await api('/api/auth/status');
+  isAdmin = res.isAdmin;
+  updateAdminUI();
+  loadDashboard();
+})();
+
+function setDate() {
+  const d = new Date();
+  document.getElementById('topbar-date').textContent =
+    d.toLocaleDateString('ur-PK', { weekday:'long', year:'numeric', month:'long', day:'numeric' });
+}
+
+// ─── API ────────────────────────────────────────────────────────────────────
+async function api(url, method='GET', body=null) {
+  const opts = { method, headers: { 'Content-Type': 'application/json' } };
+  if (body) opts.body = JSON.stringify(body);
+  const r = await fetch(url, opts);
+  return r.json();
+}
+
+// ─── LANG ───────────────────────────────────────────────────────────────────
+function setLang(l) {
+  currentLang = l;
+  document.querySelectorAll('.lang-btn').forEach((b,i) => {
+    b.classList.toggle('active', ['ur','ar','en'][i] === l);
+  });
+  if (l === 'en') {
+    document.body.classList.add('lang-en');
+    document.documentElement.setAttribute('lang','en');
+    document.documentElement.setAttribute('dir','ltr');
+  } else {
+    document.body.classList.remove('lang-en');
+    document.documentElement.setAttribute('lang', l === 'ar' ? 'ar' : 'ur');
+    document.documentElement.setAttribute('dir','rtl');
+  }
+  document.querySelectorAll('[data-ur]').forEach(el => {
+    el.textContent = l === 'en' ? (el.dataset.en || el.dataset.ur) : el.dataset.ur;
+  });
+}
+
+// ─── NAVIGATION ─────────────────────────────────────────────────────────────
+const pageTitles = {
+  dashboard: { ur: 'ڈیش بورڈ', en: 'Dashboard' },
+  members:   { ur: 'اراکین کا ریکارڈ', en: 'Members Registry' },
+  projects:  { ur: 'منصوبوں کا ریکارڈ', en: 'Projects Log' },
+  meetings:  { ur: 'اجلاس کا ریکارڈ', en: 'Meetings Log' },
+  admin:     { ur: 'ایڈمن پینل', en: 'Admin Panel' },
+};
+
+function showPage(name) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById('page-' + name).classList.add('active');
+  document.querySelector(`.nav-item[data-page="${name}"]`).classList.add('active');
+  const t = pageTitles[name];
+  document.getElementById('topbar-title').textContent = currentLang === 'en' ? t.en : t.ur;
+  if (name === 'dashboard') loadDashboard();
+  if (name === 'members')   loadMembers();
+  if (name === 'projects')  loadProjects();
+  if (name === 'meetings')  loadMeetings();
+  if (name === 'admin')     loadAdminSettings();
+  closeSidebar();
+}
+
+// ─── SIDEBAR ────────────────────────────────────────────────────────────────
+function toggleSidebar() {
+  document.getElementById('sidebar').classList.toggle('open');
+  document.getElementById('overlay').classList.toggle('open');
+}
+function closeSidebar() {
+  document.getElementById('sidebar').classList.remove('open');
+  document.getElementById('overlay').classList.remove('open');
+}
+
+// ─── MODAL ──────────────────────────────────────────────────────────────────
+function openModal(id) { document.getElementById(id).classList.add('open'); }
+function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+document.querySelectorAll('.modal-bg').forEach(m => {
+  m.addEventListener('click', e => { if (e.target === m) m.classList.remove('open'); });
+});
+
+// ─── TOAST ──────────────────────────────────────────────────────────────────
+function toast(msg, err=false) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast show' + (err ? ' error' : '');
+  setTimeout(() => t.classList.remove('show'), 3000);
+}
+
+// ─── AUTH ───────────────────────────────────────────────────────────────────
+function toggleAdminLogin() {
+  if (isAdmin) { showPage('admin'); return; }
+  openModal('login-modal');
+}
+
+async function doLogin() {
+  const pw = document.getElementById('login-password').value;
+  const r = await api('/api/auth/login', 'POST', { password: pw });
+  if (r.success) {
+    isAdmin = true;
+    updateAdminUI();
+    closeModal('login-modal');
+    document.getElementById('login-password').value = '';
+    toast('✅ کامیابی سے لاگ ان ہوئے');
+  } else { toast('❌ غلط پاسورڈ', true); }
+}
+
+async function doLogout() {
+  await api('/api/auth/logout', 'POST');
+  isAdmin = false;
+  updateAdminUI();
+  showPage('dashboard');
+  toast('لاگ آؤٹ ہو گئے');
+}
+
+async function changePassword() {
+  const np = document.getElementById('new-password').value;
+  const cp = document.getElementById('confirm-password').value;
+  if (np !== cp) return toast('❌ پاسورڈ میل نہیں کھاتے', true);
+  const r = await api('/api/auth/change-password', 'POST', { newPassword: np });
+  if (r.success) toast('✅ پاسورڈ تبدیل ہو گیا');
+  else toast('❌ ' + r.error, true);
+}
+
+function updateAdminUI() {
+  document.querySelectorAll('.admin-only').forEach(el => {
+    el.style.display = isAdmin ? '' : 'none';
+  });
+  const btn = document.getElementById('adminBtn');
+  btn.textContent = isAdmin ? '⚙️ ایڈمن پینل' : '🔐 ایڈمن لاگ ان';
+  btn.className = 'admin-btn' + (isAdmin ? ' logged-in' : '');
+  const adminNav = document.getElementById('admin-nav-item');
+  adminNav.style.display = isAdmin ? '' : 'none';
+}
+
+// ─── DASHBOARD ──────────────────────────────────────────────────────────────
+async function loadDashboard() {
+  const d = await api('/api/dashboard');
+  document.getElementById('stat-members').textContent  = d.stats.totalMembers;
+  document.getElementById('stat-projects').textContent = d.stats.activeProjects;
+  document.getElementById('stat-meetings').textContent = d.stats.totalMeetings;
+  document.getElementById('stat-done').textContent     = d.stats.completedProjects;
+
+  const dm = document.getElementById('dash-meetings');
+  dm.innerHTML = d.recentMeetings.length ? d.recentMeetings.map(m => `
+    <div style="padding:10px 0;border-bottom:1px solid var(--border)" onclick="viewMeeting('${m._id}')" style="cursor:pointer">
+      <div style="font-size:14px">${m.title_ur || m.title_en || '—'}</div>
+      <div style="font-size:11px;color:var(--muted);direction:ltr;margin-top:3px">${fmtDate(m.date)}</div>
+    </div>`).join('')
+  : '<div class="empty"><div class="empty-icon">📋</div><div class="empty-text">کوئی اجلاس نہیں</div></div>';
+
+  const dp = document.getElementById('dash-projects');
+  dp.innerHTML = d.recentProjects.length ? d.recentProjects.map(p => `
+    <div style="padding:10px 0;border-bottom:1px solid var(--border);cursor:pointer" onclick="viewProject('${p._id}')">
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <span style="font-size:14px">${p.title_ur || p.title_en || '—'}</span>
+        ${statusBadge(p.status)}
+      </div>
+      <div style="margin-top:6px">
+        <div class="progress-bar-wrap"><div class="progress-bar" style="width:${p.progress||0}%"></div></div>
+        <div style="font-size:10px;color:var(--muted);margin-top:2px;direction:ltr">${p.progress||0}%</div>
+      </div>
+    </div>`).join('')
+  : '<div class="empty"><div class="empty-icon">📁</div><div class="empty-text">کوئی منصوبہ نہیں</div></div>';
+}
+
+// ─── MEMBERS ────────────────────────────────────────────────────────────────
+async function loadMembers() {
+  allMembers = await api('/api/members');
+  // populate role filter
+  const roles = [...new Set(allMembers.map(m => m.role).filter(Boolean))];
+  const rf = document.getElementById('member-role-filter');
+  const cur = rf.value;
+  rf.innerHTML = `<option value="">— تمام عہدے —</option>` + roles.map(r => `<option value="${r}"${cur===r?' selected':''}>${r}</option>`).join('');
+  renderMembers(allMembers);
+}
+
+function filterMembers() {
+  const s = document.getElementById('member-search').value.toLowerCase();
+  const r = document.getElementById('member-role-filter').value;
+  let list = allMembers;
+  if (r) list = list.filter(m => m.role === r);
+  if (s) list = list.filter(m =>
+    (m.name_ur||'').includes(s) || (m.name_en||'').toLowerCase().includes(s) ||
+    (m.phone||'').includes(s));
+  renderMembers(list);
+}
+
+function setMemberView(v) {
+  memberView = v;
+  document.getElementById('members-grid').style.display  = v==='grid'  ? '' : 'none';
+  document.getElementById('members-table').style.display = v==='table' ? '' : 'none';
+  document.getElementById('view-grid').classList.toggle('btn-primary', v==='grid');
+  document.getElementById('view-table').classList.toggle('btn-primary', v==='table');
+  document.getElementById('view-grid').classList.toggle('btn-secondary', v!=='grid');
+  document.getElementById('view-table').classList.toggle('btn-secondary', v!=='table');
+}
+
+function renderMembers(list) {
+  // Grid view
+  document.getElementById('members-grid').innerHTML = list.length ? list.map(m => `
+    <div class="member-card" onclick="viewMember('${m._id}')">
+      <div class="member-avatar">🧑</div>
+      <div class="member-name">${m.name_ur || m.name_en || '—'}</div>
+      <div class="member-role">${m.role || ''}</div>
+      <div class="member-phone">${m.phone || ''}</div>
+      <div style="margin-top:8px">${m.status==='active'||!m.status ? '<span class="badge badge-active">فعال</span>' : '<span class="badge badge-paused">غیر فعال</span>'}</div>
+      ${isAdmin ? `<div class="action-btns" style="justify-content:center;margin-top:10px" onclick="event.stopPropagation()">
+        <button class="btn-icon btn-edit" onclick="editMember('${m._id}')">✏️</button>
+        <button class="btn-icon btn-del" onclick="deleteMember('${m._id}')">🗑️</button>
+      </div>` : ''}
+    </div>`).join('')
+  : '<div class="empty" style="grid-column:1/-1"><div class="empty-icon">👥</div><div class="empty-text">کوئی رکن موجود نہیں</div></div>';
+
+  // Table view
+  document.getElementById('members-tbody').innerHTML = list.length ? list.map(m => `
+    <tr>
+      <td>${m.name_ur || '—'}</td>
+      <td style="direction:ltr">${m.name_en || '—'}</td>
+      <td>${m.role || '—'}</td>
+      <td style="direction:ltr">${m.phone || '—'}</td>
+      <td style="direction:ltr;font-size:12px">${fmtDate(m.joinedAt)}</td>
+      <td>
+        <div class="action-btns">
+          <button class="btn-icon btn-view" onclick="viewMember('${m._id}')">👁️</button>
+          ${isAdmin ? `
+          <button class="btn-icon btn-edit" onclick="editMember('${m._id}')">✏️</button>
+          <button class="btn-icon btn-del"  onclick="deleteMember('${m._id}')">🗑️</button>` : ''}
+        </div>
+      </td>
+    </tr>`).join('')
+  : '<tr><td colspan="6" style="text-align:center;color:var(--muted);padding:30px">کوئی رکن نہیں</td></tr>';
+}
+
+function openMemberModal(member=null) {
+  document.getElementById('member-id').value = '';
+  document.getElementById('m-name-ur').value = '';
+  document.getElementById('m-name-en').value = '';
+  document.getElementById('m-role').value    = '';
+  document.getElementById('m-phone').value   = '';
+  document.getElementById('m-email').value   = '';
+  document.getElementById('m-address').value = '';
+  document.getElementById('m-joined').value  = '';
+  document.getElementById('m-status').value  = 'active';
+  document.getElementById('m-bio').value     = '';
+  document.getElementById('member-modal-title').textContent = 'نیا رکن شامل کریں';
+  if (member) {
+    document.getElementById('member-modal-title').textContent = 'رکن میں ترمیم';
+    document.getElementById('member-id').value   = member._id;
+    document.getElementById('m-name-ur').value   = member.name_ur||'';
+    document.getElementById('m-name-en').value   = member.name_en||'';
+    document.getElementById('m-role').value      = member.role||'';
+    document.getElementById('m-phone').value     = member.phone||'';
+    document.getElementById('m-email').value     = member.email||'';
+    document.getElementById('m-address').value   = member.address||'';
+    document.getElementById('m-joined').value    = (member.joinedAt||'').substring(0,10);
+    document.getElementById('m-status').value    = member.status||'active';
+    document.getElementById('m-bio').value       = member.bio||'';
+  }
+  openModal('member-modal');
+}
+
+async function editMember(id) {
+  const m = await api('/api/members/' + id);
+  openMemberModal(m);
+}
+
+async function saveMember() {
+  const id = document.getElementById('member-id').value;
+  const body = {
+    name_ur:  document.getElementById('m-name-ur').value,
+    name_en:  document.getElementById('m-name-en').value,
+    role:     document.getElementById('m-role').value,
+    phone:    document.getElementById('m-phone').value,
+    email:    document.getElementById('m-email').value,
+    address:  document.getElementById('m-address').value,
+    joinedAt: document.getElementById('m-joined').value || new Date().toISOString(),
+    status:   document.getElementById('m-status').value,
+    bio:      document.getElementById('m-bio').value,
+  };
+  if (!body.name_ur) return toast('❌ نام ضروری ہے', true);
+  if (id) await api('/api/members/' + id, 'PUT', body);
+  else    await api('/api/members', 'POST', body);
+  closeModal('member-modal');
+  toast('✅ رکن محفوظ ہو گیا');
+  loadMembers();
+}
+
+async function deleteMember(id) {
+  if (!confirm('کیا آپ واقعی اس رکن کو حذف کرنا چاہتے ہیں؟')) return;
+  await api('/api/members/' + id, 'DELETE');
+  toast('🗑️ رکن حذف ہو گیا');
+  loadMembers();
+}
+
+async function viewMember(id) {
+  const m = await api('/api/members/' + id);
+  document.getElementById('mbd-title').textContent = m.name_ur || m.name_en || 'رکن';
+  document.getElementById('mbd-body').innerHTML = `
+    <div class="detail-panel">
+      <div style="text-align:center;margin-bottom:20px">
+        <div class="member-avatar" style="margin:0 auto 12px;width:80px;height:80px;font-size:36px">🧑</div>
+        <div style="font-size:20px">${m.name_ur||'—'}</div>
+        <div style="font-size:14px;direction:ltr;color:var(--muted)">${m.name_en||''}</div>
+        <div style="margin-top:8px">${statusBadge(m.status,'active','inactive')}</div>
+      </div>
+      <div class="detail-grid">
+        <div class="detail-item"><label>عہدہ / Role</label><div class="val" style="color:var(--gold)">${m.role||'—'}</div></div>
+        <div class="detail-item"><label>📞 رابطہ</label><div class="val" style="direction:ltr">${m.phone||'—'}</div></div>
+        <div class="detail-item"><label>📧 ای میل</label><div class="val" style="direction:ltr;font-size:12px">${m.email||'—'}</div></div>
+        <div class="detail-item"><label>📍 پتہ</label><div class="val">${m.address||'—'}</div></div>
+        <div class="detail-item"><label>تاریخ شمولیت</label><div class="val" style="direction:ltr;font-size:12px">${fmtDate(m.joinedAt)}</div></div>
+      </div>
+      ${m.bio ? `<hr class="divider"><div><label style="font-size:11px;color:var(--muted)">تعارف / Bio</label><p style="margin-top:6px;font-size:14px">${m.bio}</p></div>` : ''}
+    </div>
+    ${isAdmin ? `<div style="display:flex;gap:10px;justify-content:flex-end">
+      <button class="btn btn-secondary btn-sm" onclick="editMember('${m._id}');closeModal('member-detail-modal')">✏️ ترمیم</button>
+      <button class="btn btn-danger btn-sm" onclick="deleteMember('${m._id}');closeModal('member-detail-modal')">🗑️ حذف</button>
+    </div>` : ''}`;
+  openModal('member-detail-modal');
+}
+
+// ─── PROJECTS ───────────────────────────────────────────────────────────────
+async function loadProjects() {
+  allProjects = await api('/api/projects');
+  renderProjects(allProjects);
+}
+
+function filterProjects() {
+  const s = document.getElementById('project-search').value.toLowerCase();
+  const st = document.getElementById('project-status-filter').value;
+  let list = allProjects;
+  if (st) list = list.filter(p => p.status === st);
+  if (s)  list = list.filter(p =>
+    (p.title_ur||'').includes(s) || (p.title_en||'').toLowerCase().includes(s));
+  renderProjects(list);
+}
+
+function renderProjects(list) {
+  document.getElementById('projects-list').innerHTML = list.length ? list.map(p => `
+    <div class="card" style="margin-bottom:16px;cursor:pointer" onclick="viewProject('${p._id}')">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px">
+        <div>
+          <div style="font-size:17px">${p.title_ur || p.title_en || '—'}</div>
+          ${p.title_en && p.title_ur ? `<div style="font-size:12px;color:var(--muted);direction:ltr">${p.title_en}</div>` : ''}
+        </div>
+        <div style="display:flex;gap:8px;align-items:center">
+          ${statusBadge(p.status)}
+          ${isAdmin ? `<div onclick="event.stopPropagation()" style="display:flex;gap:6px">
+            <button class="btn-icon btn-edit" onclick="editProject('${p._id}')">✏️</button>
+            <button class="btn-icon btn-del"  onclick="deleteProject('${p._id}')">🗑️</button>
+          </div>` : ''}
+        </div>
+      </div>
+      ${p.description_ur ? `<div style="font-size:13px;color:var(--text)aa;margin-bottom:12px">${p.description_ur.substring(0,120)}${p.description_ur.length>120?'...':''}</div>` : ''}
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap">
+        <div style="flex:1;min-width:160px">
+          <div style="font-size:11px;color:var(--muted);margin-bottom:4px">پیش رفت ${p.progress||0}%</div>
+          <div class="progress-bar-wrap"><div class="progress-bar" style="width:${p.progress||0}%"></div></div>
+        </div>
+        <div style="display:flex;gap:16px;font-size:12px;color:var(--muted)">
+          ${p.lead ? `<span>👤 ${p.lead}</span>` : ''}
+          ${p.startDate ? `<span style="direction:ltr">📅 ${fmtDate(p.startDate)}</span>` : ''}
+          ${p.budget ? `<span>💰 ${p.budget}</span>` : ''}
+          <span style="color:var(--green3)">💬 ${(p.updates||[]).length} اپڈیٹ</span>
+        </div>
+      </div>
+    </div>`).join('')
+  : '<div class="empty"><div class="empty-icon">📁</div><div class="empty-text">کوئی منصوبہ موجود نہیں</div></div>';
+}
+
+function openProjectModal(project=null) {
+  ['p-title-ur','p-title-en','p-lead','p-budget','p-desc-ur','p-desc-en'].forEach(id => document.getElementById(id).value='');
+  document.getElementById('project-id').value  = '';
+  document.getElementById('p-status').value    = 'active';
+  document.getElementById('p-progress').value  = '0';
+  document.getElementById('p-start').value     = '';
+  document.getElementById('p-end').value       = '';
+  document.getElementById('project-modal-title').textContent = 'نیا منصوبہ';
+  if (project) {
+    document.getElementById('project-modal-title').textContent = 'منصوبے میں ترمیم';
+    document.getElementById('project-id').value   = project._id;
+    document.getElementById('p-title-ur').value   = project.title_ur||'';
+    document.getElementById('p-title-en').value   = project.title_en||'';
+    document.getElementById('p-status').value     = project.status||'active';
+    document.getElementById('p-progress').value   = project.progress||0;
+    document.getElementById('p-start').value      = (project.startDate||'').substring(0,10);
+    document.getElementById('p-end').value        = (project.endDate||'').substring(0,10);
+    document.getElementById('p-lead').value       = project.lead||'';
+    document.getElementById('p-budget').value     = project.budget||'';
+    document.getElementById('p-desc-ur').value    = project.description_ur||'';
+    document.getElementById('p-desc-en').value    = project.description_en||'';
+  }
+  openModal('project-modal');
+}
+
+async function editProject(id) {
+  const p = await api('/api/projects/' + id);
+  openProjectModal(p);
+}
+
+async function saveProject() {
+  const id = document.getElementById('project-id').value;
+  const body = {
+    title_ur:       document.getElementById('p-title-ur').value,
+    title_en:       document.getElementById('p-title-en').value,
+    status:         document.getElementById('p-status').value,
+    progress:       parseInt(document.getElementById('p-progress').value)||0,
+    startDate:      document.getElementById('p-start').value,
+    endDate:        document.getElementById('p-end').value,
+    lead:           document.getElementById('p-lead').value,
+    budget:         document.getElementById('p-budget').value,
+    description_ur: document.getElementById('p-desc-ur').value,
+    description_en: document.getElementById('p-desc-en').value,
+  };
+  if (!body.title_ur) return toast('❌ عنوان ضروری ہے', true);
+  if (id) await api('/api/projects/' + id, 'PUT', body);
+  else    await api('/api/projects', 'POST', body);
+  closeModal('project-modal');
+  toast('✅ منصوبہ محفوظ ہو گیا');
+  loadProjects();
+}
+
+async function deleteProject(id) {
+  if (!confirm('کیا آپ واقعی اس منصوبے کو حذف کرنا چاہتے ہیں؟')) return;
+  await api('/api/projects/' + id, 'DELETE');
+  toast('🗑️ منصوبہ حذف ہو گیا');
+  loadProjects();
+}
+
+async function viewProject(id) {
+  const p = await api('/api/projects/' + id);
+  document.getElementById('pd-title').textContent = p.title_ur || p.title_en || '—';
+  let updatesHtml = '';
+  if (isAdmin) {
+    updatesHtml = `
+      <hr class="divider">
+      <div class="section-title" style="font-size:15px">📝 <span>پیش رفت لاگ</span></div>
+      <div class="updates-list" id="pd-updates">
+        ${(p.updates||[]).length ? (p.updates).map(u => `
+          <div class="update-item">
+            <div class="update-dot"></div>
+            <div><div class="update-text">${u.text}</div><div class="update-date">${fmtDateTime(u.date)}</div></div>
+          </div>`).join('') : '<div style="color:var(--muted);font-size:13px">کوئی اپڈیٹ نہیں</div>'}
+      </div>
+      <div style="display:flex;gap:10px;margin-top:12px">
+        <input id="pd-update-input" type="text" placeholder="نئی اپڈیٹ درج کریں..." style="flex:1">
+        <button class="btn btn-primary btn-sm" onclick="addProjectUpdate('${p._id}')">شامل کریں</button>
+      </div>`;
+  } else {
+    updatesHtml = (p.updates||[]).length ? `
+      <hr class="divider">
+      <div class="section-title" style="font-size:15px">📝 پیش رفت لاگ</div>
+      <div class="updates-list">
+        ${(p.updates).map(u => `
+          <div class="update-item">
+            <div class="update-dot"></div>
+            <div><div class="update-text">${u.text}</div><div class="update-date">${fmtDateTime(u.date)}</div></div>
+          </div>`).join('')}
+      </div>` : '';
+  }
+
+  document.getElementById('pd-body').innerHTML = `
+    <div class="detail-panel">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+        ${statusBadge(p.status)}
+        <div style="direction:ltr;font-size:12px;color:var(--muted)">${fmtDate(p.startDate)} — ${fmtDate(p.endDate)}</div>
+      </div>
+      <div class="detail-grid" style="margin-bottom:16px">
+        <div class="detail-item"><label>ذمہ دار</label><div class="val">${p.lead||'—'}</div></div>
+        <div class="detail-item"><label>بجٹ</label><div class="val" style="direction:ltr">${p.budget||'—'}</div></div>
+      </div>
+      <div style="margin-bottom:12px">
+        <div style="font-size:11px;color:var(--muted);margin-bottom:6px">پیش رفت ${p.progress||0}%</div>
+        <div class="progress-bar-wrap" style="height:10px"><div class="progress-bar" style="width:${p.progress||0}%"></div></div>
+      </div>
+      ${p.description_ur ? `<div style="margin-bottom:8px;font-size:14px">${p.description_ur}</div>` : ''}
+      ${p.description_en ? `<div style="font-size:13px;color:var(--muted);direction:ltr">${p.description_en}</div>` : ''}
+    </div>
+    ${updatesHtml}
+    ${isAdmin ? `<div style="display:flex;gap:8px;justify-content:flex-end;margin-top:16px">
+      <button class="btn btn-secondary btn-sm" onclick="editProject('${p._id}');closeModal('project-detail-modal')">✏️ ترمیم</button>
+    </div>` : ''}`;
+  openModal('project-detail-modal');
+}
+
+async function addProjectUpdate(id) {
+  const text = document.getElementById('pd-update-input').value.trim();
+  if (!text) return;
+  await api('/api/projects/' + id + '/updates', 'POST', { text });
+  toast('✅ اپڈیٹ شامل ہو گئی');
+  viewProject(id); // refresh modal
+  loadProjects();
+}
+
+// ─── MEETINGS ───────────────────────────────────────────────────────────────
+async function loadMeetings() {
+  allMeetings = await api('/api/meetings');
+  renderMeetings(allMeetings);
+}
+
+function renderMeetings(list) {
+  document.getElementById('meetings-list').innerHTML = list.length ? list.map(m => `
+    <div class="meeting-item" onclick="viewMeeting('${m._id}')">
+      <div class="meeting-header">
+        <div>
+          <div class="meeting-title">${m.title_ur || m.title_en || '—'}</div>
+          ${m.title_en && m.title_ur ? `<div style="font-size:12px;color:var(--muted);direction:ltr">${m.title_en}</div>` : ''}
+        </div>
+        <div style="text-align:left;flex-shrink:0">
+          <div class="meeting-date">${fmtDate(m.date)}</div>
+          ${m.time ? `<div class="meeting-date">${m.time}</div>` : ''}
+          ${isAdmin ? `<div onclick="event.stopPropagation()" style="display:flex;gap:6px;margin-top:6px;justify-content:flex-end">
+            <button class="btn-icon btn-edit" onclick="editMeeting('${m._id}')">✏️</button>
+            <button class="btn-icon btn-del"  onclick="deleteMeeting('${m._id}')">🗑️</button>
+          </div>` : ''}
+        </div>
+      </div>
+      <div class="meeting-meta">
+        ${m.venue    ? `<span>📍 ${m.venue}</span>`   : ''}
+        ${m.chair    ? `<span>👤 ${m.chair}</span>`   : ''}
+        ${m.attendees ? `<span>👥 ${m.attendees.split(',').length} شرکاء</span>` : ''}
+      </div>
+      ${m.decisions ? `<div class="meeting-decisions">📌 ${m.decisions.substring(0,100)}${m.decisions.length>100?'...':''}</div>` : ''}
+    </div>`).join('')
+  : '<div class="empty"><div class="empty-icon">🕌</div><div class="empty-text">کوئی اجلاس موجود نہیں</div></div>';
+}
+
+function openMeetingModal(meeting=null) {
+  ['mt-title-ur','mt-title-en','mt-venue','mt-chair','mt-attendees','mt-agenda','mt-decisions','mt-actions'].forEach(id => document.getElementById(id).value='');
+  document.getElementById('meeting-id').value = '';
+  document.getElementById('mt-date').value = '';
+  document.getElementById('mt-time').value = '';
+  document.getElementById('meeting-modal-title').textContent = 'نیا اجلاس';
+  if (meeting) {
+    document.getElementById('meeting-modal-title').textContent = 'اجلاس میں ترمیم';
+    document.getElementById('meeting-id').value      = meeting._id;
+    document.getElementById('mt-title-ur').value    = meeting.title_ur||'';
+    document.getElementById('mt-title-en').value    = meeting.title_en||'';
+    document.getElementById('mt-date').value         = (meeting.date||'').substring(0,10);
+    document.getElementById('mt-time').value         = meeting.time||'';
+    document.getElementById('mt-venue').value        = meeting.venue||'';
+    document.getElementById('mt-chair').value        = meeting.chair||'';
+    document.getElementById('mt-attendees').value    = meeting.attendees||'';
+    document.getElementById('mt-agenda').value       = meeting.agenda||'';
+    document.getElementById('mt-decisions').value    = meeting.decisions||'';
+    document.getElementById('mt-actions').value      = meeting.actionItems||'';
+  }
+  openModal('meeting-modal');
+}
+
+async function editMeeting(id) {
+  const m = await api('/api/meetings/' + id);
+  openMeetingModal(m);
+}
+
+async function saveMeeting() {
+  const id = document.getElementById('meeting-id').value;
+  const body = {
+    title_ur:    document.getElementById('mt-title-ur').value,
+    title_en:    document.getElementById('mt-title-en').value,
+    date:        document.getElementById('mt-date').value,
+    time:        document.getElementById('mt-time').value,
+    venue:       document.getElementById('mt-venue').value,
+    chair:       document.getElementById('mt-chair').value,
+    attendees:   document.getElementById('mt-attendees').value,
+    agenda:      document.getElementById('mt-agenda').value,
+    decisions:   document.getElementById('mt-decisions').value,
+    actionItems: document.getElementById('mt-actions').value,
+  };
+  if (!body.title_ur) return toast('❌ عنوان ضروری ہے', true);
+  if (!body.date)     return toast('❌ تاریخ ضروری ہے', true);
+  if (id) await api('/api/meetings/' + id, 'PUT', body);
+  else    await api('/api/meetings', 'POST', body);
+  closeModal('meeting-modal');
+  toast('✅ اجلاس محفوظ ہو گیا');
+  loadMeetings();
+}
+
+async function deleteMeeting(id) {
+  if (!confirm('کیا آپ واقعی اس اجلاس کو حذف کرنا چاہتے ہیں؟')) return;
+  await api('/api/meetings/' + id, 'DELETE');
+  toast('🗑️ اجلاس حذف ہو گیا');
+  loadMeetings();
+}
+
+async function viewMeeting(id) {
+  const m = await api('/api/meetings/' + id);
+  document.getElementById('md-title').textContent = m.title_ur || m.title_en || '—';
+  const attendeeList = m.attendees ? m.attendees.split(',').map(a => `<span class="tag">${a.trim()}</span>`).join('') : '—';
+  document.getElementById('md-body').innerHTML = `
+    <div class="detail-panel">
+      <div class="detail-grid">
+        <div class="detail-item"><label>📅 تاریخ</label><div class="val" style="direction:ltr">${fmtDate(m.date)} ${m.time||''}</div></div>
+        <div class="detail-item"><label>📍 مقام</label><div class="val">${m.venue||'—'}</div></div>
+        <div class="detail-item"><label>👤 صدر</label><div class="val">${m.chair||'—'}</div></div>
+      </div>
+      ${m.attendees ? `
+      <hr class="divider">
+      <label style="font-size:11px;color:var(--muted)">👥 شرکاء</label>
+      <div class="tag-list" style="margin-top:8px">${attendeeList}</div>` : ''}
+      ${m.agenda ? `
+      <hr class="divider">
+      <label style="font-size:11px;color:var(--muted)">📋 ایجنڈا</label>
+      <div style="margin-top:6px;font-size:14px">${m.agenda}</div>` : ''}
+      ${m.decisions ? `
+      <hr class="divider">
+      <label style="font-size:11px;color:var(--muted)">📌 فیصلے</label>
+      <div style="margin-top:6px;font-size:14px">${m.decisions}</div>` : ''}
+      ${m.actionItems ? `
+      <hr class="divider">
+      <label style="font-size:11px;color:var(--muted)">✅ اگلی کارروائی</label>
+      <div style="margin-top:6px;font-size:14px">${m.actionItems}</div>` : ''}
+    </div>
+    ${isAdmin ? `<div style="display:flex;gap:8px;justify-content:flex-end">
+      <button class="btn btn-secondary btn-sm" onclick="editMeeting('${m._id}');closeModal('meeting-detail-modal')">✏️ ترمیم</button>
+      <button class="btn btn-danger btn-sm" onclick="deleteMeeting('${m._id}');closeModal('meeting-detail-modal')">🗑️ حذف</button>
+    </div>` : ''}`;
+  openModal('meeting-detail-modal');
+}
+
+// ─── ADMIN SETTINGS ─────────────────────────────────────────────────────────
+async function loadAdminSettings() {
+  const info = await api('/api/settings/org');
+  document.getElementById('org-name-ur').value    = info.name_ur||'';
+  document.getElementById('org-name-en').value    = info.name_en||'';
+  document.getElementById('org-name-ar').value    = info.name_ar||'';
+  document.getElementById('org-founded').value    = info.founded||'';
+  document.getElementById('org-location').value   = info.location||'';
+  document.getElementById('org-tagline-ur').value = info.tagline_ur||'';
+  document.getElementById('org-desc-ur').value    = info.description_ur||'';
+  document.getElementById('org-desc-en').value    = info.description_en||'';
+}
+
+async function saveOrgInfo() {
+  const body = {
+    name_ur:        document.getElementById('org-name-ur').value,
+    name_en:        document.getElementById('org-name-en').value,
+    name_ar:        document.getElementById('org-name-ar').value,
+    founded:        document.getElementById('org-founded').value,
+    location:       document.getElementById('org-location').value,
+    tagline_ur:     document.getElementById('org-tagline-ur').value,
+    description_ur: document.getElementById('org-desc-ur').value,
+    description_en: document.getElementById('org-desc-en').value,
+  };
+  await api('/api/settings/org', 'PUT', body);
+  toast('✅ معلومات محفوظ ہو گئیں');
+}
+
+// ─── HELPERS ────────────────────────────────────────────────────────────────
+function fmtDate(d) {
+  if (!d) return '—';
+  try { return new Date(d).toLocaleDateString('ur-PK', { year:'numeric', month:'short', day:'numeric' }); }
+  catch { return d; }
+}
+function fmtDateTime(d) {
+  if (!d) return '';
+  try { return new Date(d).toLocaleString('ur-PK', { year:'numeric', month:'short', day:'numeric', hour:'2-digit', minute:'2-digit' }); }
+  catch { return d; }
+}
+
+function statusBadge(status) {
+  const map = {
+    active:    ['badge-active',  'فعال'],
+    completed: ['badge-done',    'مکمل'],
+    pending:   ['badge-pending', 'زیر التواء'],
+    paused:    ['badge-paused',  'معطل'],
+    inactive:  ['badge-paused',  'غیر فعال'],
+  };
+  const [cls, label] = map[status] || ['badge-pending', status||'—'];
+  return `<span class="badge ${cls}">${label}</span>`;
+}
+</script>
+</body>
+</html>
